@@ -8,7 +8,7 @@
   <style>
     @font-face {
       font-family: "THSarabunIT9";
-      src: local("TH SarabunIT๙"), local("TH Sarabun New");
+      src: local("TH SarabunIT๙"), local("TH SarabunIT9"), local("TH Sarabun New");
     }
 
     :root {
@@ -61,7 +61,7 @@
 
     .toolbar h1 {
       margin: 0;
-      font-size: 26px;
+      font-size: 28px;
       line-height: 1.1;
       font-weight: 700;
     }
@@ -78,19 +78,19 @@
       padding: 8px 14px;
       color: #fff;
       background: var(--btn);
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       font-family: inherit;
       line-height: 1;
     }
 
     .hint {
-      font-size: 18px;
+      font-size: 20px;
       color: #444;
     }
 
     .status {
-      font-size: 18px;
+      font-size: 20px;
       display: none;
     }
 
@@ -109,7 +109,7 @@
 
     .loading {
       text-align: center;
-      font-size: 24px;
+      font-size: 28px;
       padding: 48px 12px;
     }
 
@@ -149,12 +149,19 @@
     .title-box {
       text-align: center;
       font-weight: 700;
-      font-size: 24px;
-      line-height: 1.2;
+      font-size: 34px;
+      line-height: 1.12;
       white-space: pre-line;
-      padding: 8px 8px 6px;
+      padding: 10px 10px 8px;
       border: 1px solid var(--border);
       border-bottom: 0;
+    }
+
+    .title-box .sub {
+      font-size: 31px;
+      line-height: 1.1;
+      font-weight: 700;
+      margin-top: 2px;
     }
 
     table.mission {
@@ -170,10 +177,10 @@
       border: 1px solid var(--border);
       text-align: center;
       vertical-align: top;
-      padding: 6px 8px;
+      padding: 6px 10px;
       white-space: pre-line;
-      line-height: 1.25;
-      font-size: 19px;
+      line-height: 1.14;
+      font-size: 34px;
       font-weight: 400;
       background: var(--body-bg);
       background-image: none !important;
@@ -181,11 +188,12 @@
     }
 
     table.mission th {
-      font-size: 20px;
+      font-size: 33px;
       font-weight: 700;
-      padding-top: 4px;
-      padding-bottom: 4px;
+      padding-top: 6px;
+      padding-bottom: 6px;
       vertical-align: middle;
+      line-height: 1.05;
     }
 
     .name-cell {
@@ -203,10 +211,11 @@
       bottom: 8px;
       text-align: right;
       color: var(--danger);
-      font-size: 18px;
+      font-size: 28px;
       font-weight: 700;
       background: #fff;
       padding: 2px 4px;
+      border: 0 !important;
     }
 
     .signature {
@@ -216,9 +225,10 @@
       bottom: 18px;
       text-align: center;
       white-space: pre-line;
-      font-size: 18px;
-      line-height: 1.3;
+      font-size: 28px;
+      line-height: 1.15;
       background: transparent;
+      border: 0 !important;
       pointer-events: none;
     }
 
@@ -227,7 +237,7 @@
       margin: 0 auto;
       padding: 16px 8px;
       color: var(--danger);
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 700;
     }
 
@@ -242,8 +252,30 @@
     .page-2 col.c3 { width: 35.8%; }
     .page-2 col.c4 { width: 29.2%; }
 
-    .rows-area {
-      height: 878px;
+    /* พื้นที่ตารางแต่ละหน้า */
+    .rows-area.page1 { height: 878px; }
+    .rows-area.page2 { height: 878px; }
+    .rows-area.page3 { height: 878px; }
+
+    /* แถวที่เป็นช่องเดียวกัน ลบเส้นคั่นด้านใน */
+    tr.single-merged td.inner-merge {
+      border-left: 0 !important;
+      border-right: 0 !important;
+    }
+
+    tr.single-merged td.inner-merge.first {
+      border-left: 1px solid var(--border) !important;
+    }
+
+    tr.single-merged td.inner-merge.last {
+      border-right: 1px solid var(--border) !important;
+    }
+
+    /* กรณีหน้า 3 ส่วนลายเซ็นและหมายเหตุไม่ให้มีเส้น */
+    .signature,
+    .footer-note {
+      box-shadow: none !important;
+      outline: none !important;
     }
 
     @media (max-width: 900px) {
@@ -258,6 +290,7 @@
 
       button {
         width: 100%;
+        font-size: 18px;
       }
     }
   </style>
@@ -280,7 +313,7 @@
   </div>
 
   <script>
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxHECZFj3UCB-FasdMxxdeX-fGhPWVb1a5l85eMgxnq153XYCOSH-Ez0aJTKGT7trvNqA/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbw74o7v2c41P16Et7MjZykAUGyqkA9JEe-JRVw7GYnH9xW6Cy3ot9T1mMou2HwBbpVvAQ/exec";
     let appData = null;
 
     function showStatus(message, isError = false) {
@@ -360,6 +393,7 @@
         const wrap = document.createElement("div");
         wrap.className = "page-wrap";
         const pageClass = "page-" + page.id;
+        const rowsAreaClass = page.id === 1 ? "page1" : page.id === 2 ? "page2" : "page3";
 
         wrap.innerHTML = `
           <div class="page-actions">
@@ -370,10 +404,11 @@
             <div class="page-scale-box">
               <div class="sheet-page ${pageClass}" id="page-${idx}">
                 <div class="title-box" style="background:${page.titleColor}">
-                  ${escapeHtml(page.title)}<br>${escapeHtml(page.subtitle || "")}
+                  <div>${escapeHtml(page.title)}</div>
+                  <div class="sub">${escapeHtml(page.subtitle || "")}</div>
                 </div>
 
-                <div class="rows-area">
+                <div class="rows-area ${rowsAreaClass}">
                   <table class="mission">
                     <colgroup>
                       <col class="c1">
@@ -408,14 +443,23 @@
 
     function renderGroup(group) {
       const span = group.entries.length || 1;
-      return group.entries.map((entry, idx) => `
-        <tr>
-          ${idx === 0 ? `<td class="name-cell" rowspan="${span}">${escapeHtml(group.name)}</td>` : ""}
-          <td>${escapeHtml(entry.time || "")}</td>
-          <td class="${entry.red ? "red-text" : ""}">${escapeHtml(entry.mission || "")}</td>
-          <td>${escapeHtml(entry.location || "")}</td>
-        </tr>
-      `).join("");
+
+      return group.entries.map((entry, idx) => {
+        const time = (entry.time || "").trim();
+        const mission = (entry.mission || "").trim();
+        const location = (entry.location || "").trim();
+
+        const mergeRow = !time && !mission && !location;
+
+        return `
+          <tr class="${mergeRow ? "single-merged" : ""}">
+            ${idx === 0 ? `<td class="name-cell" rowspan="${span}">${escapeHtml(group.name)}</td>` : ""}
+            <td class="${mergeRow ? "inner-merge first" : ""}">${escapeHtml(time)}</td>
+            <td class="${entry.red ? "red-text" : ""} ${mergeRow ? "inner-merge" : ""}">${escapeHtml(mission)}</td>
+            <td class="${mergeRow ? "inner-merge last" : ""}">${escapeHtml(location)}</td>
+          </tr>
+        `;
+      }).join("");
     }
 
     function escapeHtml(text) {
