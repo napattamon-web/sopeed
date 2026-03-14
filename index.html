@@ -7,46 +7,63 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     @font-face {
-      font-family: 'THSarabunIT9';
-      src: local('TH SarabunIT๙'), local('TH Sarabun New');
+      font-family: "THSarabunIT9";
+      src: local("TH SarabunIT๙"), local("TH Sarabun New");
     }
 
     :root {
+      --page-w: 1651px;
+      --page-h: 991px;
       --border: #111111;
-      --danger: #B40000;
-      --page-bg: #F3F5F7;
-      --card-bg: #FFFFFF;
-      --btn: #1F6FEB;
-      --btn2: #4B5563;
-      --body-bg: #F7F7F7;
+      --danger: #b40000;
       --text: #111111;
+      --bg: #ffffff;
+      --body-bg: #f3f3f3;
+      --btn: #4b5563;
       --ok: #0f5132;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "THSarabunIT9", "TH SarabunIT๙", "TH Sarabun New", Tahoma, sans-serif;
+      overflow-x: hidden;
+    }
 
     body {
-      margin: 0;
-      padding: 20px;
-      background: var(--page-bg);
-      color: var(--text);
-      font-family: 'THSarabunIT9', 'TH SarabunIT๙', 'TH Sarabun New', Tahoma, sans-serif;
+      padding: 8px 0 20px;
+    }
+
+    .toolbar,
+    .hint,
+    .status,
+    .loading {
+      width: min(100%, 1651px);
+      margin: 0 auto 10px;
+      padding: 0 8px;
     }
 
     .toolbar {
-      max-width: 1400px;
-      margin: 0 auto 16px;
       display: flex;
       justify-content: space-between;
-      gap: 12px;
       align-items: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
 
     .toolbar h1 {
       margin: 0;
-      font-size: 32px;
-      line-height: 1.2;
+      font-size: 26px;
+      line-height: 1.1;
+      font-weight: 700;
     }
 
     .toolbar .actions {
@@ -57,29 +74,22 @@
 
     button {
       border: 0;
-      border-radius: 10px;
-      padding: 10px 14px;
+      border-radius: 8px;
+      padding: 8px 14px;
       color: #fff;
       background: var(--btn);
       font-size: 18px;
       cursor: pointer;
       font-family: inherit;
-    }
-
-    button.secondary {
-      background: var(--btn2);
+      line-height: 1;
     }
 
     .hint {
-      max-width: 1400px;
-      margin: 0 auto 16px;
       font-size: 18px;
       color: #444;
     }
 
     .status {
-      max-width: 1400px;
-      margin: 0 auto 12px;
       font-size: 18px;
       display: none;
     }
@@ -97,60 +107,85 @@
       font-weight: 700;
     }
 
+    .loading {
+      text-align: center;
+      font-size: 24px;
+      padding: 48px 12px;
+    }
+
     .page-wrap {
-      max-width: 1400px;
-      margin: 0 auto 24px;
-      background: var(--card-bg);
-      padding: 16px;
-      border-radius: 16px;
-      box-shadow: 0 8px 28px rgba(0,0,0,.08);
+      width: min(100%, 1651px);
+      margin: 0 auto 18px;
+      padding: 0 8px;
     }
 
     .page-actions {
       display: flex;
       justify-content: flex-end;
-      gap: 8px;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .stage {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .page-scale-box {
+      width: var(--page-w);
+      height: var(--page-h);
+      transform-origin: top left;
+      position: relative;
+      background: #fff;
     }
 
     .sheet-page {
+      width: var(--page-w);
+      height: var(--page-h);
       background: #fff;
-      border: 1px solid #d0d7de;
       overflow: hidden;
+      position: relative;
     }
 
     .title-box {
       text-align: center;
       font-weight: 700;
-      font-size: 28px;
-      line-height: 1.25;
+      font-size: 24px;
+      line-height: 1.2;
       white-space: pre-line;
-      padding: 12px 10px;
-      border-bottom: 1px solid var(--border);
+      padding: 8px 8px 6px;
+      border: 1px solid var(--border);
+      border-bottom: 0;
     }
 
     table.mission {
       width: 100%;
       border-collapse: collapse;
+      border-spacing: 0;
       table-layout: fixed;
+      margin: 0;
     }
 
     table.mission th,
     table.mission td {
       border: 1px solid var(--border);
       text-align: center;
-      vertical-align: middle;
-      padding: 8px 10px;
+      vertical-align: top;
+      padding: 6px 8px;
       white-space: pre-line;
       line-height: 1.25;
-      font-size: 22px;
+      font-size: 19px;
+      font-weight: 400;
       background: var(--body-bg);
+      background-image: none !important;
+      box-shadow: none !important;
     }
 
     table.mission th {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      vertical-align: middle;
     }
 
     .name-cell {
@@ -159,45 +194,71 @@
 
     .red-text {
       color: var(--danger);
-      font-weight: 700;
+      font-weight: 700 !important;
     }
 
     .footer-note {
-      padding: 10px 6px 0;
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
       text-align: right;
       color: var(--danger);
-      font-size: 22px;
+      font-size: 18px;
       font-weight: 700;
       background: #fff;
+      padding: 2px 4px;
     }
 
     .signature {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 18px;
       text-align: center;
       white-space: pre-line;
-      padding: 18px 10px 8px;
-      font-size: 22px;
-      background: #fff;
+      font-size: 18px;
+      line-height: 1.3;
+      background: transparent;
+      pointer-events: none;
     }
 
-    .loading {
-      max-width: 1400px;
+    .error-box {
+      width: min(100%, 1651px);
       margin: 0 auto;
-      text-align: center;
-      font-size: 24px;
-      padding: 48px 12px;
-    }
-
-    .error {
+      padding: 16px 8px;
       color: var(--danger);
+      font-size: 20px;
       font-weight: 700;
     }
 
+    /* สัดส่วนคอลัมน์ */
+    .page-1 col.c1, .page-3 col.c1 { width: 19%; }
+    .page-1 col.c2, .page-3 col.c2 { width: 21%; }
+    .page-1 col.c3, .page-3 col.c3 { width: 42%; }
+    .page-1 col.c4, .page-3 col.c4 { width: 18%; }
+
+    .page-2 col.c1 { width: 16.8%; }
+    .page-2 col.c2 { width: 18.2%; }
+    .page-2 col.c3 { width: 35.8%; }
+    .page-2 col.c4 { width: 29.2%; }
+
+    .rows-area {
+      height: 878px;
+    }
+
     @media (max-width: 900px) {
-      body { padding: 10px; }
-      .title-box { font-size: 22px; }
-      table.mission th, table.mission td { font-size: 16px; padding: 6px; }
-      table.mission th { font-size: 18px; }
-      button { width: 100%; }
+      .toolbar h1 {
+        font-size: 22px;
+      }
+
+      .hint,
+      .status {
+        font-size: 16px;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -205,39 +266,36 @@
   <div class="toolbar">
     <h1>ภารกิจผู้บังคับบัญชา</h1>
     <div class="actions">
-      <button class="secondary" onclick="reloadData()">รีเฟรชข้อมูล</button>
-      <button onclick="captureAll()">แคปรูปทั้งหมด</button>
+      <button onclick="reloadData()">รีเฟรชข้อมูล</button>
     </div>
   </div>
 
   <div class="hint">
-    หน้าเว็บนี้ดึงข้อมูลจาก Google Apps Script และแสดงผลจาก Google Sheet โดยตรง
+    หน้าเว็บนี้ดึงข้อมูลจาก Google Apps Script และแชร์ภาพแต่ละหน้าในขนาด 1651x991 px
   </div>
 
   <div id="statusBox" class="status"></div>
-
   <div id="app">
     <div class="loading">กำลังโหลดข้อมูล...</div>
   </div>
 
   <script>
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxJTcaq3_rXJlGBs8DRPv8y7l7JuMigUJdC5cggTXKo70QiqPLSsySXV5BC3LMUsAgeYg/exec';
-
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbxHECZFj3UCB-FasdMxxdeX-fGhPWVb1a5l85eMgxnq153XYCOSH-Ez0aJTKGT7trvNqA/exec";
     let appData = null;
 
     function showStatus(message, isError = false) {
-      const box = document.getElementById('statusBox');
+      const box = document.getElementById("statusBox");
       box.textContent = message;
-      box.className = 'status show ' + (isError ? 'error' : 'ok');
+      box.className = "status show " + (isError ? "error" : "ok");
     }
 
     function fetchPagesJSONP() {
       return new Promise((resolve, reject) => {
-        const callbackName = 'missionCallback_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-        const script = document.createElement('script');
+        const callbackName = "missionCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
         const timeout = setTimeout(() => {
           cleanup();
-          reject(new Error('โหลดข้อมูลหมดเวลา'));
+          reject(new Error("โหลดข้อมูลหมดเวลา"));
         }, 15000);
 
         function cleanup() {
@@ -250,30 +308,39 @@
           }
         }
 
-        window[callbackName] = function(data) {
+        window[callbackName] = function (data) {
           cleanup();
-
           if (!data || !data.ok) {
-            reject(new Error((data && data.message) || 'โหลดข้อมูลไม่สำเร็จ'));
+            reject(new Error((data && data.message) || "โหลดข้อมูลไม่สำเร็จ"));
             return;
           }
-
           resolve(data.pages || []);
         };
 
-        script.onerror = function() {
+        script.onerror = function () {
           cleanup();
-          reject(new Error('เชื่อมต่อ GAS ไม่สำเร็จ'));
+          reject(new Error("เชื่อมต่อ GAS ไม่สำเร็จ หรือยังไม่ได้ deploy เวอร์ชันล่าสุด"));
         };
 
         script.src =
           GAS_URL +
-          (GAS_URL.includes('?') ? '&' : '?') +
-          'action=pages' +
-          '&callback=' + encodeURIComponent(callbackName) +
-          '&_t=' + Date.now();
+          (GAS_URL.includes("?") ? "&" : "?") +
+          "action=pages" +
+          "&callback=" + encodeURIComponent(callbackName) +
+          "&_t=" + Date.now();
 
         document.body.appendChild(script);
+      });
+    }
+
+    function fitAllPages() {
+      const boxes = document.querySelectorAll(".page-scale-box");
+      boxes.forEach(box => {
+        const parent = box.parentElement;
+        const availableWidth = parent.clientWidth;
+        const scale = Math.min(1, availableWidth / 1651);
+        box.style.transform = "scale(" + scale + ")";
+        parent.style.height = (991 * scale) + "px";
       });
     }
 
@@ -281,50 +348,57 @@
       const pages = await fetchPagesJSONP();
       appData = { pages };
       renderPages(pages);
-      showStatus('โหลดข้อมูลจาก Google Sheet สำเร็จ');
+      fitAllPages();
+      showStatus("โหลดข้อมูลจาก Google Sheet สำเร็จ");
     }
 
     function renderPages(pages) {
-      const app = document.getElementById('app');
-      app.innerHTML = '';
+      const app = document.getElementById("app");
+      app.innerHTML = "";
 
       pages.forEach((page, idx) => {
-        const wrap = document.createElement('div');
-        wrap.className = 'page-wrap';
+        const wrap = document.createElement("div");
+        wrap.className = "page-wrap";
+        const pageClass = "page-" + page.id;
 
         wrap.innerHTML = `
           <div class="page-actions">
-            <button onclick="capturePage(${idx})">แคปรูปหน้านี้</button>
-            <button class="secondary" onclick="sharePage(${idx})">ส่งต่อหน้านี้</button>
+            <button onclick="sharePage(${idx})">แชร์หน้านี้</button>
           </div>
 
-          <div class="sheet-page" id="page-${idx}">
-            <div class="title-box" style="background:${page.titleColor}">
-              ${escapeHtml(page.title)}<br>${escapeHtml(page.subtitle || '')}
+          <div class="stage">
+            <div class="page-scale-box">
+              <div class="sheet-page ${pageClass}" id="page-${idx}">
+                <div class="title-box" style="background:${page.titleColor}">
+                  ${escapeHtml(page.title)}<br>${escapeHtml(page.subtitle || "")}
+                </div>
+
+                <div class="rows-area">
+                  <table class="mission">
+                    <colgroup>
+                      <col class="c1">
+                      <col class="c2">
+                      <col class="c3">
+                      <col class="c4">
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th style="background:${page.headerColor}">ผู้บังคับบัญชา</th>
+                        <th style="background:${page.headerColor}">เวลา</th>
+                        <th style="background:${page.headerColor}">ภารกิจ</th>
+                        <th style="background:${page.headerColor}">สถานที่</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${page.rows.map(renderGroup).join("")}
+                    </tbody>
+                  </table>
+                </div>
+
+                ${page.signature ? `<div class="signature">${escapeHtml(page.signature)}</div>` : ""}
+                ${page.footerNote ? `<div class="footer-note">${escapeHtml(page.footerNote)}</div>` : ""}
+              </div>
             </div>
-
-            <table class="mission">
-              <colgroup>
-                <col style="width: 22%">
-                <col style="width: 18%">
-                <col style="width: 35%">
-                <col style="width: 25%">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th style="background:${page.headerColor}">ผู้บังคับบัญชา</th>
-                  <th style="background:${page.headerColor}">เวลา</th>
-                  <th style="background:${page.headerColor}">ภารกิจ</th>
-                  <th style="background:${page.headerColor}">สถานที่</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${page.rows.map(renderGroup).join('')}
-              </tbody>
-            </table>
-
-            ${page.signature ? '<div class="signature">' + escapeHtml(page.signature) + '</div>' : ''}
-            ${page.footerNote ? '<div class="footer-note">' + escapeHtml(page.footerNote) + '</div>' : ''}
           </div>
         `;
 
@@ -334,88 +408,81 @@
 
     function renderGroup(group) {
       const span = group.entries.length || 1;
-
       return group.entries.map((entry, idx) => `
         <tr>
-          ${idx === 0 ? '<td class="name-cell" rowspan="' + span + '">' + escapeHtml(group.name) + '</td>' : ''}
-          <td>${escapeHtml(entry.time || '')}</td>
-          <td class="${entry.red ? 'red-text' : ''}">${escapeHtml(entry.mission || '')}</td>
-          <td>${escapeHtml(entry.location || '')}</td>
+          ${idx === 0 ? `<td class="name-cell" rowspan="${span}">${escapeHtml(group.name)}</td>` : ""}
+          <td>${escapeHtml(entry.time || "")}</td>
+          <td class="${entry.red ? "red-text" : ""}">${escapeHtml(entry.mission || "")}</td>
+          <td>${escapeHtml(entry.location || "")}</td>
         </tr>
-      `).join('');
+      `).join("");
     }
 
     function escapeHtml(text) {
-      return String(text || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/\n/g, '<br>');
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/\n/g, "<br>");
     }
 
-    async function captureElement(el, filename) {
-      const canvas = await html2canvas(el, {
-        scale: 2,
+    async function pageToBlob(pageEl) {
+      const canvas = await html2canvas(pageEl, {
+        scale: 1,
         useCORS: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: "#ffffff",
+        logging: false,
+        imageTimeout: 0,
+        width: 1651,
+        height: 991,
+        windowWidth: 1651,
+        windowHeight: 991
       });
-
-      const link = document.createElement('a');
-      link.download = filename;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-
-      return canvas;
-    }
-
-    async function capturePage(index) {
-      const page = document.getElementById('page-' + index);
-      await captureElement(page, 'mission-page-' + (index + 1) + '.png');
-    }
-
-    async function captureAll() {
-      const total = (appData && appData.pages ? appData.pages.length : 0);
-      for (let i = 0; i < total; i++) {
-        await capturePage(i);
-      }
+      return await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
     }
 
     async function sharePage(index) {
-      const page = document.getElementById('page-' + index);
-      const canvas = await html2canvas(page, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff'
-      });
+      try {
+        showStatus("กำลังเตรียมภาพ...");
+        const page = document.getElementById("page-" + index);
+        const blob = await pageToBlob(page);
+        const file = new File([blob], "mission-page-" + (index + 1) + ".png", { type: "image/png" });
 
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      const file = new File([blob], 'mission-page-' + (index + 1) + '.png', { type: 'image/png' });
-
-      if (navigator.canShare && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'ภารกิจหน้า ' + (index + 1)
-        });
-      } else {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = file.name;
-        a.click();
-        alert('อุปกรณ์นี้ยังไม่รองรับการส่งต่อโดยตรง ระบบจึงดาวน์โหลดรูปให้แทน');
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "ภารกิจหน้า " + (index + 1)
+          });
+          showStatus("แชร์ภาพสำเร็จ");
+        } else {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = file.name;
+          a.click();
+          showStatus("อุปกรณ์นี้ไม่รองรับการแชร์ตรง ระบบดาวน์โหลดรูปให้แทน");
+        }
+      } catch (err) {
+        showStatus("แชร์ไม่สำเร็จ: " + (err.message || err), true);
       }
     }
 
     function reloadData() {
-      document.getElementById('app').innerHTML = '<div class="loading">กำลังโหลดข้อมูล...</div>';
-      showStatus('กำลังรีเฟรชข้อมูล...');
-      loadData();
+      document.getElementById("app").innerHTML = '<div class="loading">กำลังโหลดข้อมูล...</div>';
+      showStatus("กำลังรีเฟรชข้อมูล...");
+      loadData().catch(err => {
+        document.getElementById("app").innerHTML =
+          '<div class="error-box">โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err) + "</div>";
+        showStatus("โหลดข้อมูลไม่สำเร็จ: " + (err.message || err), true);
+      });
     }
 
+    window.addEventListener("resize", fitAllPages);
+
     loadData().catch(err => {
-      document.getElementById('app').innerHTML =
-        '<div class="loading error">โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err) + '</div>';
-      showStatus('โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err), true);
+      document.getElementById("app").innerHTML =
+        '<div class="error-box">โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err) + "</div>";
+      showStatus("โหลดข้อมูลไม่สำเร็จ: " + (err.message || err), true);
     });
   </script>
 </body>
