@@ -2,8 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <title>426 SHOP – Member & Claim Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#f8f1ea" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
@@ -46,14 +46,18 @@
     body::before{
       content:"";
       position:fixed;
-      inset:0;
-      pointer-events:none;
-      opacity:.08;
-      background-image:url('https://img2.imgbiz.com/imgbiz/IMG_0923.jpeg');
+      right:8px;
+      bottom:8px;
+      width:min(42vw,220px);
+      height:min(42vw,220px);
+      background-image:url("https://img2.imgbiz.com/imgbiz/IMG_1141eda396408a914d01.png");
       background-repeat:no-repeat;
-      background-position:right bottom;
-      background-size:min(280px,38vw);
-      filter:saturate(.9);
+      background-position:center;
+      background-size:contain;
+      opacity:.08;
+      pointer-events:none;
+      z-index:0;
+      filter:blur(.2px);
     }
 
     .app{
@@ -151,7 +155,6 @@
       line-height:1.7;
       text-align:center;
       font-weight:700;
-      white-space:pre-line;
     }
     .global-banner.show{display:block}
     .global-banner.error{
@@ -195,7 +198,7 @@
     .claim-only-sub,.status-only-sub{position:relative;margin-top:6px;font-size:.78rem;color:var(--sub);line-height:1.6}
 
     .warning-blink{
-      display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 12px;padding:12px 14px;border-radius:18px;
+      display:flex;align-items:center;justify-content:center;gap:8px;margin:0 0 12px;padding:12px 14px;border-radius:18px;
       background:linear-gradient(135deg,#fff4e8,#ffe9db);border:1px solid #f0cfb6;color:#b5642d;font-size:.82rem;font-weight:800;line-height:1.6;text-align:center
     }
 
@@ -204,9 +207,6 @@
     .input-shell{
       background:rgba(255,253,250,.98);border:1.5px solid #eadfd4;border-radius:20px;padding:11px 12px;
       transition:.2s ease;box-shadow:inset 0 1px 0 rgba(255,255,255,.65);width:100%;text-align:center
-    }
-    .input-shell.left{
-      text-align:left;
     }
     .input-shell:focus-within{border-color:#d6b39b;box-shadow:0 0 0 4px rgba(214,179,155,.14);background:#fff}
     .input-shell.note{padding:9px 10px;border-style:dashed;background:#fffaf7}
@@ -221,17 +221,7 @@
     input[type="email"],input[type="password"],input[type="text"],input[type="date"],textarea{
       width:100%;border:0;outline:0;background:transparent;font-family:inherit;font-size:.96rem;color:var(--text);text-align:center
     }
-    .input-shell.left input[type="text"],
-    .input-shell.left input[type="email"],
-    .input-shell.left input[type="date"],
-    .input-shell.left textarea{
-      text-align:left;
-    }
     input::placeholder,textarea::placeholder{color:#b6a396;text-align:center}
-    .input-shell.left input::placeholder,
-    .input-shell.left textarea::placeholder{
-      text-align:left;
-    }
     textarea{resize:none;min-height:92px;line-height:1.6}
 
     .remember-row{margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;font-size:.78rem;color:var(--sub);text-align:center}
@@ -252,7 +242,7 @@
     }
 
     .action-row{display:flex;gap:10px;margin-top:14px;justify-content:center}
-    .btn-primary,.btn-secondary,.btn-danger,.btn-link-small,.upload-btn,.copy-account-btn,.btn-copy,.step-chip{
+    .btn-primary,.btn-secondary,.btn-danger,.btn-link-small,.upload-btn,.copy-account-btn,.btn-copy,.step-chip,.btn-mini{
       border-radius:999px;font-family:inherit;font-weight:800;cursor:pointer;transition:.2s ease
     }
     .btn-primary{
@@ -263,24 +253,17 @@
     .btn-secondary{min-height:52px;border:1px solid #e6d8cd;background:linear-gradient(180deg,#fffdfb,#f7efe8);color:var(--sub);padding:0 16px;font-size:.82rem}
     .btn-danger{min-height:52px;border:1px solid #f0cdcd;background:linear-gradient(180deg,#fff7f7,#ffefef);color:#c46a6a;padding:0 16px;font-size:.82rem}
     .btn-link-small{min-height:42px;border:1px solid #eadbcf;background:#fffaf6;color:#8f7868;padding:0 16px;font-size:.78rem;width:100%;margin-top:12px}
+    .btn-mini{
+      min-height:40px;border:1px solid #e6d8cd;background:linear-gradient(180deg,#fffdfb,#f7efe8);
+      color:#8b7466;padding:0 14px;font-size:.78rem;display:inline-flex;align-items:center;justify-content:center;gap:6px
+    }
 
     .profile-box{
-      margin-top:10px;border-radius:20px;border:1px solid #eadacd;background:linear-gradient(180deg,#fffaf6,#f9f0e9);padding:12px;display:grid;gap:8px;font-size:.82rem;text-align:left
+      margin-top:10px;border-radius:20px;border:1px solid #eadacd;background:linear-gradient(180deg,#fffaf6,#f9f0e9);padding:12px;display:grid;gap:10px;font-size:.82rem;text-align:left
     }
-    .profile-box .line{
-      text-align:left;
-    }
-
-    .expiry-check-card{
-      margin-top:12px;border-radius:22px;border:1px solid #eadbcf;background:linear-gradient(180deg,#fffaf7,#fff3ed);
-      padding:13px 12px;text-align:left
-    }
-    .expiry-check-title{
-      font-size:.88rem;font-weight:800;color:#7a5d4b;margin-bottom:10px;text-align:center
-    }
-    .expiry-check-result{
-      margin-top:10px;padding:10px 12px;border-radius:16px;background:#fff;border:1px solid #eadfd4;font-size:.82rem;line-height:1.7;white-space:pre-line;text-align:left
-    }
+    .profile-inline-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-start}
+    .profile-row{line-height:1.7;text-align:left}
+    .profile-row strong{color:#7a5d4b}
 
     .payment-section{display:none}
     .payment-card{
@@ -343,7 +326,7 @@
       border:1px solid #ead8cb;color:#7b6254;font-size:.78rem;font-weight:800;box-shadow:0 6px 14px rgba(118,84,63,.05)
     }
     .route-chip .emoji{font-size:.9rem}
-    .route-cute-sub{margin-top:8px;font-size:.74rem;color:#a18878;line-height:1.6;white-space:pre-line}
+    .route-cute-sub{margin-top:8px;font-size:.74rem;color:#a18878;line-height:1.6}
 
     .status-route-wrap{margin-top:0}
     .status-route-card{
@@ -351,7 +334,7 @@
       background:linear-gradient(180deg,#fffaf7,#fff5ef);text-align:center;box-shadow:0 8px 18px rgba(118,84,63,.05)
     }
     .status-route-title{font-size:.8rem;font-weight:800;color:#8a6a59;margin-bottom:7px}
-    .status-route-text{font-size:.76rem;color:#9a8679;line-height:1.7;white-space:pre-line}
+    .status-route-text{font-size:.76rem;color:#9a8679;line-height:1.7}
 
     #summary,#statusSummary{margin-top:8px;text-align:center;font-size:.78rem}
     .summary-pill{
@@ -476,6 +459,7 @@
       .bank-minimal-top{flex-direction:column;align-items:stretch}
       .bank-card-name{text-align:center}
       .route-cute-badges{flex-direction:column;align-items:center}
+      .profile-inline-actions{flex-direction:column}
     }
   </style>
 </head>
@@ -662,17 +646,13 @@
           <div id="claimAlert" class="alert-box"></div>
 
           <div class="profile-box" id="memberProfileBox" style="display:none;">
-            <div class="line"><strong>อีเมล:</strong> <span id="profileEmail">-</span></div>
-            <div class="line"><strong>วันที่ในระบบ:</strong> <span id="profileMemberDate">-</span></div>
-            <div class="line"><strong>ปีสมัคร:</strong> <span id="profileSignupYear">-</span></div>
-          </div>
-
-          <div class="expiry-check-card">
-            <div class="expiry-check-title">เช็ควันหมดอายุ</div>
-            <div class="action-row" style="margin-top:0;">
-              <button class="btn-secondary" id="btnCheckExpiry" type="button">เช็ควันหมดอายุ</button>
+            <div class="profile-row"><strong>อีเมล:</strong> <span id="profileEmail">-</span></div>
+            <div class="profile-row"><strong>วันที่ในระบบ:</strong> <span id="profileMemberDate">-</span></div>
+            <div class="profile-row"><strong>ปีสมัคร:</strong> <span id="profileSignupYear">-</span></div>
+            <div class="profile-row"><strong>วันหมดอายุล่าสุด:</strong> <span id="profileLastKnownExpiry">-</span></div>
+            <div class="profile-inline-actions">
+              <button type="button" class="btn-mini" id="btnCheckExpiryInline">เช็ควันหมดอายุ</button>
             </div>
-            <div class="expiry-check-result" id="expiryCheckResult">กดปุ่มเพื่อเช็ควันหมดอายุล่าสุดของอีเมลนี้</div>
           </div>
 
           <div class="field-group">
@@ -682,7 +662,7 @@
             </div>
           </div>
 
-          <div class="warning-blink">
+          <div class="warning-blink" style="margin-top:12px;">
             <span class="icon">⚠️</span>
             <span>หากแจ้งข้อมูลไม่ตรงตามความจริง ตัดสิทธิ์อัตโนมัติ</span>
           </div>
@@ -717,8 +697,8 @@
               </div>
 
               <div class="qr-wrap">
-                <div class="qr-title">สแกน QR เพื่อชำระเงิน</div>
-                <img class="qr-img" id="paymentQr" src="https://img2.imgbiz.com/imgbiz/IMG_07716df4e329cefeb35c.jpeg" alt="QR Payment" />
+                <div class="qr-title">สแกน QR เพื่อชำระเงิน 19฿</div>
+                <img class="qr-img" id="paymentQr" src="https://img2.imgbiz.com/imgbiz/IMG_2680.jpeg" alt="QR Payment 19 THB" />
                 <div class="qr-caption">ชำระเงินแล้วแนบสลิปด้านล่างเพื่อให้ระบบรับเข้าคิวเคลม</div>
               </div>
 
@@ -744,9 +724,9 @@
 
                 <div class="preview-wrap" id="slipPreviewWrap">
                   <img id="slipPreview" class="preview-img" alt="ตัวอย่างสลิป" />
-                  <div class="preview-meta" style="width:100%;">
+                  <div class="preview-meta" style="width:100%;display:grid;gap:8px;">
                     <button type="button" class="btn-copy" id="btnViewLastSlip">ดูสลิปล่าสุด</button>
-                    <button type="button" class="btn-copy" id="btnRemoveSlip" style="margin-top:8px;">ลบรูปที่เลือก</button>
+                    <button type="button" class="btn-copy" id="btnRemoveSlip">ลบรูปที่เลือก</button>
                   </div>
                 </div>
               </div>
@@ -759,7 +739,7 @@
 
           <div class="field-group">
             <label class="field-label" for="noteInput">ฝากข้อความถึงแอดมิน (ถ้ามี)</label>
-            <div class="input-shell note left" id="noteField">
+            <div class="input-shell note" id="noteField">
               <textarea id="noteInput" placeholder="เช่น หลุดจากกลุ่มเมื่อวาน รบกวนช่วยดึงกลับให้ด้วย"></textarea>
             </div>
             <div class="note-counter" id="noteCounter">0 / 500</div>
@@ -775,7 +755,7 @@
 
           <div class="helper">
             <div class="route-cute-box">
-              <div class="route-cute-title">ช่องทางแจ้งเรื่องสำหรับลูกค้า</div>
+              <div class="route-cute-title">ลูกค้าสามารถแจ้งเรื่องได้สะดวก 2 ช่องทาง</div>
               <div class="route-cute-badges">
                 <span class="route-chip"><span class="emoji">💬</span> ทางไลน์</span>
                 <span class="route-chip"><span class="emoji">🌐</span> ทางเว็บ</span>
@@ -798,7 +778,7 @@
         <div class="status-card">
           <div class="status-top-frame">
             <div class="status-only-title">สถานะการเคลม</div>
-            <div class="status-only-sub">ตรวจสอบคำขอล่าสุด และสถานะคำขอของคุณได้จากหน้านี้</div>
+            <div class="status-only-sub">ตรวจสอบคำขอล่าสุด สถานะคำขอของคุณ และติดต่อแอดมินได้จากหน้านี้</div>
           </div>
 
           <div class="field-group status-route-wrap" id="routeStatusBlock">
@@ -839,7 +819,7 @@
             <div class="history-header">
               <div class="history-title-left">
                 <span class="live-dot"></span>
-                <span class="history-title-text">ประวัติคำขอของคุณ</span>
+                <span class="history-title-text">สถานะคำขอของคุณ</span>
               </div>
             </div>
             <div id="historyResults">
@@ -894,8 +874,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyNKEBhXxhgJi9M-FIJGV0rYAzqMmW8kpPzPh-vrMXdiqIfERfbZvnMTimIZ71Mpm6NwA/exec";
-    const STATUS_POLL_INTERVAL = 30000;
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyfKY6lZ5ZAFFZ50a5d4fhVu6pe2bGSUa7IrdShJXpUITkdAOochPEzVfOAyuo19x0Pkw/exec";
     const CONFIG_POLL_INTERVAL = 30000;
     const MAX_NOTE_LENGTH = 500;
     const MAX_SLIP_SIZE = 3 * 1024 * 1024;
@@ -925,14 +904,11 @@
       isOpenNow: null,
       lineEnabled: true,
       webEnabled: true,
-      lineClaimEnabled: true,
       customerNotice: "แจ้งได้ 2 ช่องทาง\n• ทางไลน์\n• ทางเว็บ",
       routeMessage: "แจ้งได้ 2 ช่องทาง\n• ทางไลน์\n• ทางเว็บ",
-      webClosedMessage: "ขออภัยค่ะ ตอนนี้ระบบเว็บปิดชั่วคราว",
-      lineClaimClosedMessage: "ตอนนี้ระบบปิดรับเคลมผ่าน LINE แล้วค่ะ\nกรุณาแจ้งเคลมผ่านหน้าเว็บเท่านั้น",
+      webClosedMessage: "ขออภัยค่ะ ตอนนี้ระบบหน้าเว็บปิดชั่วคราว\nสามารถแจ้งเรื่องผ่านทางไลน์ได้ค่ะ",
       bothClosedMessage: "ขออภัยค่ะ ตอนนี้ระบบปิดชั่วคราวทั้งทางไลน์และทางเว็บ",
-      webBannerMessage: "",
-      webClaimLink: ""
+      webBannerMessage: ""
     };
 
     const state = {
@@ -962,10 +938,10 @@
     const btnLogin = document.getElementById("btnLogin");
     const btnRegister = document.getElementById("btnRegister");
     const btnForgotPassword = document.getElementById("btnForgotPassword");
-    const btnCheckExpiry = document.getElementById("btnCheckExpiry");
     const floatAdminBtn = document.getElementById("floatAdminBtn");
     const showRegisterBtn = document.getElementById("showRegisterBtn");
     const backToLoginBtn = document.getElementById("backToLoginBtn");
+    const btnCheckExpiryInline = document.getElementById("btnCheckExpiryInline");
 
     const goClaimViewBtn = document.getElementById("goClaimViewBtn");
     const goStatusViewBtn = document.getElementById("goStatusViewBtn");
@@ -1024,12 +1000,12 @@
     const supportLineEl = document.getElementById("supportLine");
     const routeHelperText = document.getElementById("routeHelperText");
     const routeStatusText = document.getElementById("routeStatusText");
-    const expiryCheckResult = document.getElementById("expiryCheckResult");
 
     const profileBox = document.getElementById("memberProfileBox");
     const profileEmail = document.getElementById("profileEmail");
     const profileMemberDate = document.getElementById("profileMemberDate");
     const profileSignupYear = document.getElementById("profileSignupYear");
+    const profileLastKnownExpiry = document.getElementById("profileLastKnownExpiry");
 
     const miniQueueNo = document.getElementById("miniQueueNo");
     const miniClaimType = document.getElementById("miniClaimType");
@@ -1061,10 +1037,33 @@
     function normalizeEmail(value){ return String(value || "").trim().toLowerCase(); }
     function normalizeText(value){ return String(value || "").trim(); }
 
-    function requireScriptUrl() {
-      if (!SCRIPT_URL || SCRIPT_URL === "PUT_YOUR_WEB_APP_EXEC_URL_HERE") {
-        throw new Error("กรุณาใส่ SCRIPT_URL ของ Web App ก่อนใช้งาน");
+    function parseResponseLoose(data) {
+      if (!data || typeof data !== "object") {
+        return { ok: false, message: "ไม่สามารถอ่านข้อมูลจากเซิร์ฟเวอร์ได้" };
       }
+      return { ...data, ok: data.ok === true };
+    }
+
+    function isUnauthorizedMessage(message) {
+      return String(message || "").toLowerCase().indexOf("unauthorized") !== -1;
+    }
+
+    function requireScriptUrl() {
+      if (!SCRIPT_URL) throw new Error("กรุณาใส่ SCRIPT_URL ก่อนใช้งาน");
+    }
+
+    function updateHeroVisibility() {
+      const loginActive = document.getElementById("loginView").classList.contains("active");
+      const registerActive = document.getElementById("registerView").classList.contains("active");
+      heroSection.style.display = (loginActive || registerActive) ? "" : "none";
+    }
+
+    function setMemberPagePills(active) {
+      const isClaim = active === "claim";
+      goClaimViewBtn.classList.toggle("active", isClaim);
+      goStatusViewBtn.classList.toggle("active", !isClaim);
+      goClaimViewBtn2.classList.toggle("active", isClaim);
+      goStatusViewBtn2.classList.toggle("active", !isClaim);
     }
 
     function setActiveView(viewId, byUser = false) {
@@ -1072,15 +1071,9 @@
       document.querySelectorAll(".view").forEach(function(view) {
         view.classList.toggle("active", view.id === viewId);
       });
-      const loginActive = document.getElementById("loginView").classList.contains("active");
-      const registerActive = document.getElementById("registerView").classList.contains("active");
-      heroSection.style.display = (loginActive || registerActive) ? "" : "none";
-
-      const isClaim = viewId === "claimView";
-      goClaimViewBtn.classList.toggle("active", isClaim);
-      goStatusViewBtn.classList.toggle("active", !isClaim);
-      goClaimViewBtn2.classList.toggle("active", isClaim);
-      goStatusViewBtn2.classList.toggle("active", !isClaim);
+      updateHeroVisibility();
+      if (viewId === "claimView") setMemberPagePills("claim");
+      if (viewId === "statusView") setMemberPagePills("status");
     }
 
     function showLoadingOverlay() {
@@ -1165,6 +1158,14 @@
         const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
         return d + " " + months[m - 1] + " " + (y + 543);
       }
+      const dt = new Date(dateStr);
+      if (!isNaN(dt.getTime())) {
+        const y = dt.getFullYear() + 543;
+        const m = dt.getMonth();
+        const d = dt.getDate();
+        const months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+        return d + " " + months[m] + " " + y;
+      }
       return dateStr;
     }
 
@@ -1246,7 +1247,7 @@
 
       const controls = [
         btnLogin, btnRegister, btnForgotPassword, btnSubmit, btnClear,
-        showRegisterBtn, backToLoginBtn, btnPickSlip, btnCameraSlip, btnCheckExpiry
+        showRegisterBtn, backToLoginBtn, btnPickSlip, btnCameraSlip, btnCheckExpiryInline
       ];
 
       controls.forEach(el => {
@@ -1261,17 +1262,14 @@
       }
     }
 
-    function isExpiredResponse(data) {
-      return !!(data && data.expired);
-    }
-
     function buildLocalMemberFallback(email, displayName, memberDate, signupYearThai) {
       return {
         email: email || "",
         displayName: displayName || "",
         memberDate: memberDate || "",
         signupYearThai: signupYearThai || thaiYearFromYmd(memberDate || ""),
-        lastKnownExpiry: ""
+        lastKnownExpiry: "",
+        expiryDate: memberDate || ""
       };
     }
 
@@ -1361,7 +1359,6 @@
       renderHistory([]);
       renderEmptyStatusPage();
       clearForm();
-      expiryCheckResult.textContent = "กดปุ่มเพื่อเช็ควันหมดอายุล่าสุดของอีเมลนี้";
       if (!silent) setActiveView("loginView");
     }
 
@@ -1404,62 +1401,57 @@
       bankAccountNameEl.textContent = claimConfig.bankAccountName || "นภัทรธมณฑ์ ฤทธิ์ชัยศักดิ์";
       supportLineEl.textContent = claimConfig.supportLine || "@467dlpti";
 
-      let helper = "เลือกช่องทางที่สะดวกได้เลยนะคะ";
-      if (claimConfig.lineClaimEnabled === false) {
-        helper = (claimConfig.lineClaimClosedMessage || "") + (claimConfig.webClaimLink ? "\n" + claimConfig.webClaimLink : "");
-      } else if (claimConfig.routeMessage) {
-        helper = claimConfig.routeMessage;
-      }
-      routeHelperText.innerText = helper;
+      routeHelperText.innerText =
+        (claimConfig.lineEnabled && claimConfig.webEnabled)
+          ? "เลือกช่องทางที่สะดวกได้เลยนะคะ"
+          : (claimConfig.routeMessage || "เลือกช่องทางที่สะดวกได้เลยนะคะ");
 
       routeStatusText.innerText =
-        claimConfig.lineClaimEnabled === false
-          ? ((claimConfig.lineClaimClosedMessage || "ตอนนี้ปิดรับเคลมผ่าน LINE") + (claimConfig.webClaimLink ? "\n" + claimConfig.webClaimLink : ""))
-          : (claimConfig.routeMessage || "แจ้งได้ทั้งทางไลน์ และทางเว็บ");
+        (claimConfig.lineEnabled && claimConfig.webEnabled)
+          ? "แจ้งได้ทั้งทางไลน์ และทางเว็บ เลือกช่องทางที่สะดวกได้เลยค่ะ"
+          : (claimConfig.routeMessage || "กรุณาใช้ช่องทางที่ระบบเปิดให้บริการอยู่ค่ะ");
     }
 
     async function initClaimWindowConfig() {
-      const cfg = await fetchJsonWithRetry(SCRIPT_URL + "?action=config&_t=" + Date.now(), {}, 1);
+      try {
+        const cfg = await fetchJsonWithRetry(SCRIPT_URL + "?action=config&_t=" + Date.now(), {}, 1);
 
-      if (cfg.claimStartHour !== undefined) claimConfig.claimStartHour = Number(cfg.claimStartHour) || 7;
-      if (cfg.claimEndHour !== undefined) claimConfig.claimEndHour = Number(cfg.claimEndHour) || 19;
-      if (Array.isArray(cfg.claimOpenDays)) {
-        claimConfig.claimOpenDays = cfg.claimOpenDays.map(n => Number(n)).filter(n => !isNaN(n));
-      }
-      if (cfg.claimOpenText) claimConfig.claimOpenText = cfg.claimOpenText;
-      if (cfg.claimClosedText) claimConfig.claimClosedText = cfg.claimClosedText;
-      if (cfg.outOfTimeErrorText) claimConfig.outOfTimeErrorText = cfg.outOfTimeErrorText;
-      if (cfg.paidYear) claimConfig.paidYear = String(cfg.paidYear);
-      if (cfg.freeYear) claimConfig.freeYear = String(cfg.freeYear);
-      if (cfg.packagePrice !== undefined) claimConfig.packagePrice = Number(cfg.packagePrice) || 19;
-      if (cfg.bankName) claimConfig.bankName = cfg.bankName;
-      if (cfg.bankAccountNo) claimConfig.bankAccountNo = cfg.bankAccountNo;
-      if (cfg.bankAccountName) claimConfig.bankAccountName = cfg.bankAccountName;
-      if (cfg.paymentTitle) claimConfig.paymentTitle = cfg.paymentTitle;
-      if (cfg.paymentNote) claimConfig.paymentNote = cfg.paymentNote;
-      if (cfg.paymentRequireSlip) claimConfig.paymentRequireSlip = cfg.paymentRequireSlip;
-      if (cfg.supportLine) claimConfig.supportLine = cfg.supportLine;
-      if (cfg.isOpenNow !== undefined && cfg.isOpenNow !== null) claimConfig.isOpenNow = !!cfg.isOpenNow;
-      if (cfg.lineEnabled !== undefined) claimConfig.lineEnabled = !!cfg.lineEnabled;
-      if (cfg.webEnabled !== undefined) claimConfig.webEnabled = !!cfg.webEnabled;
-      if (cfg.lineClaimEnabled !== undefined) claimConfig.lineClaimEnabled = !!cfg.lineClaimEnabled;
-      if (cfg.customerNotice) claimConfig.customerNotice = cfg.customerNotice;
-      if (cfg.routeMessage) claimConfig.routeMessage = cfg.routeMessage;
-      if (cfg.webClosedMessage) claimConfig.webClosedMessage = cfg.webClosedMessage;
-      if (cfg.lineClaimClosedMessage) claimConfig.lineClaimClosedMessage = cfg.lineClaimClosedMessage;
-      if (cfg.bothClosedMessage) claimConfig.bothClosedMessage = cfg.bothClosedMessage;
-      if (cfg.webBannerMessage !== undefined) claimConfig.webBannerMessage = cfg.webBannerMessage;
-      if (cfg.webClaimLink !== undefined) claimConfig.webClaimLink = cfg.webClaimLink || "";
+        if (cfg.claimStartHour !== undefined) claimConfig.claimStartHour = Number(cfg.claimStartHour) || 7;
+        if (cfg.claimEndHour !== undefined) claimConfig.claimEndHour = Number(cfg.claimEndHour) || 19;
+        if (Array.isArray(cfg.claimOpenDays)) {
+          claimConfig.claimOpenDays = cfg.claimOpenDays.map(n => Number(n)).filter(n => !isNaN(n));
+        }
+        if (cfg.claimOpenText) claimConfig.claimOpenText = cfg.claimOpenText;
+        if (cfg.claimClosedText) claimConfig.claimClosedText = cfg.claimClosedText;
+        if (cfg.outOfTimeErrorText) claimConfig.outOfTimeErrorText = cfg.outOfTimeErrorText;
+        if (cfg.paidYear) claimConfig.paidYear = String(cfg.paidYear);
+        if (cfg.freeYear) claimConfig.freeYear = String(cfg.freeYear);
+        if (cfg.packagePrice !== undefined) claimConfig.packagePrice = Number(cfg.packagePrice) || 19;
+        if (cfg.bankName) claimConfig.bankName = cfg.bankName;
+        if (cfg.bankAccountNo) claimConfig.bankAccountNo = cfg.bankAccountNo;
+        if (cfg.bankAccountName) claimConfig.bankAccountName = cfg.bankAccountName;
+        if (cfg.paymentTitle) claimConfig.paymentTitle = cfg.paymentTitle;
+        if (cfg.paymentNote) claimConfig.paymentNote = cfg.paymentNote;
+        if (cfg.paymentRequireSlip) claimConfig.paymentRequireSlip = cfg.paymentRequireSlip;
+        if (cfg.supportLine) claimConfig.supportLine = cfg.supportLine;
+        if (cfg.isOpenNow !== undefined && cfg.isOpenNow !== null) claimConfig.isOpenNow = !!cfg.isOpenNow;
 
-      renderConfigToUI();
-      updateClaimWindowState();
-      syncPaymentSection();
-      setWebClosedState(!claimConfig.webEnabled, claimConfig.webClosedMessage || claimConfig.bothClosedMessage);
+        if (cfg.lineEnabled !== undefined) claimConfig.lineEnabled = !!cfg.lineEnabled;
+        if (cfg.webEnabled !== undefined) claimConfig.webEnabled = !!cfg.webEnabled;
+        if (cfg.customerNotice) claimConfig.customerNotice = cfg.customerNotice;
+        if (cfg.routeMessage) claimConfig.routeMessage = cfg.routeMessage;
+        if (cfg.webClosedMessage) claimConfig.webClosedMessage = cfg.webClosedMessage;
+        if (cfg.bothClosedMessage) claimConfig.bothClosedMessage = cfg.bothClosedMessage;
+        if (cfg.webBannerMessage !== undefined) claimConfig.webBannerMessage = cfg.webBannerMessage;
 
-      if (claimConfig.webBannerMessage) {
-        showGlobalBanner(claimConfig.webBannerMessage, "info");
-      } else if (!state.webClosed) {
-        hideGlobalBanner();
+        renderConfigToUI();
+        updateClaimWindowState();
+        syncPaymentSection();
+        setWebClosedState(!claimConfig.webEnabled, claimConfig.webClosedMessage || claimConfig.bothClosedMessage);
+      } catch (err) {
+        renderConfigToUI();
+        updateClaimWindowState();
+        syncPaymentSection();
       }
     }
 
@@ -1644,13 +1636,6 @@
       }
     }
 
-    async function handleExpiredResponse(message) {
-      clearLocalSession(true);
-      setActiveView("loginView");
-      showAuthStatus(message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อนจึงจะเข้าสู่ระบบได้", "error");
-      showAlert(topAlert, message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อนจึงจะเข้าสู่ระบบได้", "warning", 6000);
-    }
-
     async function handleUnauthorizedResponse(message, stayOnLogin = true) {
       clearLocalSession(true);
       if (stayOnLogin) {
@@ -1673,13 +1658,7 @@
           1
         );
 
-        if (isExpiredResponse(data)) {
-          await handleExpiredResponse(data.message);
-          renderHistory([]);
-          return [];
-        }
-
-        if (String(data && data.message || "").toLowerCase().includes("unauthorized")) {
+        if (isUnauthorizedMessage(data && data.message)) {
           await handleUnauthorizedResponse(data.message);
           renderHistory([]);
           return [];
@@ -1694,13 +1673,79 @@
       }
     }
 
+    async function fetchMemberMe(silent = false) {
+      if (!state.token) return false;
+      try {
+        const data = await fetchJsonWithRetry(
+          SCRIPT_URL + "?action=me&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now(),
+          {},
+          1
+        );
+
+        if (isUnauthorizedMessage(data && data.message)) {
+          if (!silent) {
+            await handleUnauthorizedResponse(data.message);
+          }
+          return false;
+        }
+
+        if (data && data.member) {
+          state.member = data.member;
+          updateMemberProfileUI();
+          return true;
+        }
+
+        return !!state.member;
+      } catch (err) {
+        return !!state.member;
+      }
+    }
+
+    async function fetchBootstrap() {
+      try {
+        const url = SCRIPT_URL + "?action=bootstrap" +
+          (state.token ? "&token=" + encodeURIComponent(state.token) : "") +
+          "&_t=" + Date.now();
+
+        const data = await fetchJsonWithRetry(url, {}, 1);
+
+        if (data && data.config) {
+          claimConfig = { ...claimConfig, ...data.config };
+          renderConfigToUI();
+          updateClaimWindowState();
+          syncPaymentSection();
+          setWebClosedState(!claimConfig.webEnabled, claimConfig.webClosedMessage || claimConfig.bothClosedMessage);
+        }
+
+        if (data && data.todaySummary) {
+          renderLiveStatus(data.todaySummary);
+        }
+
+        if (data && data.member) {
+          state.member = data.member;
+          updateMemberProfileUI();
+        }
+
+        if (data && Array.isArray(data.history)) {
+          renderHistory(data.history);
+          renderLatestStatusPage({ history: data.history, current: data.history[0] || null });
+        }
+      } catch (err) {
+        console.warn("bootstrap failed", err);
+      }
+    }
+
+    function getClaimTypeLabel(claimType) {
+      return claimType === "paid" ? "แพ็กดูแล 19 บาท" : "เคลมฟรี";
+    }
+
     function buildCopyText(entry) {
       return [
         "426 SHOP – รายละเอียดคำขอเคลม",
         "อีเมล: " + (entry.email || "-"),
         "วันหมดอายุ: " + (entry.expiry || "-"),
         "สมัครเมื่อ: " + (entry.year || "-"),
-        "ประเภทเคลม: " + (entry.claimType === "paid" ? "แพ็กดูแล 19 บาท" : "เคลมฟรี"),
+        "ประเภทเคลม: " + getClaimTypeLabel(entry.claimType),
         "คิวเคลม: " + (entry.queueNo || "-"),
         "เวลาแจ้งล่าสุด: " + (entry.lastAt || "-"),
         "",
@@ -1736,16 +1781,6 @@
       }
     }
 
-    function buildAdminMessage(entry) {
-      return encodeURIComponent(
-        "สวัสดีค่ะ แอดมิน\nต้องการสอบถามสถานะเคลม\nอีเมล: " + (entry.email || "-") +
-        "\nวันหมดอายุ: " + (entry.expiry || "-") +
-        "\nปีสมัคร: " + (entry.year || "-") +
-        "\nคิวเคลม: " + (entry.queueNo || "-") +
-        "\nสถานะ: " + (entry.statusText || "-")
-      );
-    }
-
     function fillMiniStats(current) {
       miniQueueNo.textContent = current && current.queueNo ? current.queueNo : "-";
       miniClaimType.textContent = current && current.claimType === "paid" ? "19฿" : (current && current.claimType === "free" ? "ฟรี" : "-");
@@ -1753,7 +1788,7 @@
     }
 
     function renderEmptyStatusPage() {
-      resultsDiv.innerHTML = '<div class="live-empty">คุณยังไม่มีรายการเคลมในระบบ</div>';
+      resultsDiv.innerHTML = "";
       statusSummary.innerHTML = "";
       statusPageText.innerHTML = "<span class='status-info'>คุณยังไม่มีรายการเคลมในระบบ</span>";
       claimStepCard.style.display = "none";
@@ -1784,59 +1819,6 @@
         "<span class='status-time'>เวลาแจ้งล่าสุด: " + escapeHtml(formatThaiDateTime(state.lastClaimAt)) + "</span>";
 
       renderClaimSteps(current.statusText || "");
-
-      history.forEach(function(item) {
-        const claimType = (item.claimType || "").toLowerCase() === "paid" ? "paid" : "free";
-        const tagText = claimType === "paid" ? "แพ็กดูแล 19 บาท" : "เคลมฟรี";
-        const safeEmail = escapeHtml(item.email || "-");
-        const safeExpiry = escapeHtml(item.expiry || "-");
-        const safeYear = escapeHtml(item.signupYear || "-");
-        const safeQueue = escapeHtml(item.queueNo || "-");
-        const safeStatus = item.statusText || "รอดำเนินการ";
-        const lastAt = formatThaiDateTime(item.createdAt || item.updatedAt || "");
-
-        const entry = {
-          email: item.email || "-",
-          expiry: item.expiry || "-",
-          year: item.signupYear || "-",
-          queueNo: item.queueNo || "-",
-          claimType,
-          statusText: safeStatus,
-          lastAt
-        };
-
-        const card = document.createElement("div");
-        card.className = "result-item";
-        card.innerHTML =
-          '<div class="item-email">' + safeEmail + '</div>' +
-          '<div class="item-tag ' + (claimType === "paid" ? "paid" : "") + '">' + escapeHtml(tagText) + '</div>' +
-          '<div class="item-meta">' +
-            '<span>วันหมดอายุ: ' + safeExpiry + '</span>' +
-            '<span>สมัครเมื่อ: ' + safeYear + '</span>' +
-            '<span>คิวเคลม: ' + safeQueue + '</span>' +
-          '</div>' +
-          '<div class="item-meta">' +
-            '<span>เวลาแจ้งล่าสุด: ' + escapeHtml(lastAt) + '</span>' +
-          '</div>' +
-          '<div class="item-body">' + decorateStatusText(safeStatus) + '</div>' +
-          '<div class="result-actions">' +
-            '<button class="btn-copy">คัดลอกรายละเอียดคำขอ</button>' +
-            '<button class="btn-link-small btn-contact-admin">ติดต่อแอดมินเกี่ยวกับเคสนี้</button>' +
-          '</div>';
-
-        const btnCopy = card.querySelector(".btn-copy");
-        const btnContact = card.querySelector(".btn-contact-admin");
-
-        btnCopy.addEventListener("click", function() {
-          copyToClipboard(btnCopy, buildCopyText(entry));
-        });
-
-        btnContact.addEventListener("click", function() {
-          window.open(SUPPORT_LINK_BASE + encodeURIComponent(claimConfig.supportLine || "@467dlpti") + "?text=" + buildAdminMessage(entry), "_blank");
-        });
-
-        resultsDiv.appendChild(card);
-      });
     }
 
     async function safeSetMemberView(viewId) {
@@ -1873,8 +1855,9 @@
       state.member.signupYearThai = signupYear;
 
       profileEmail.textContent = state.member.email || "-";
-      profileMemberDate.textContent = memberDate || "-";
+      profileMemberDate.textContent = formatThaiDate(memberDate || "");
       profileSignupYear.textContent = signupYear || "-";
+      profileLastKnownExpiry.textContent = state.member.lastKnownExpiry ? formatThaiDate(state.member.lastKnownExpiry) : "-";
 
       profileBox.style.display = "grid";
       signupYearInput.value = signupYear;
@@ -2027,6 +2010,13 @@
       return true;
     }
 
+    function isMemberExpired(member) {
+      const date = member && (member.expiryDate || member.memberDate) ? String(member.expiryDate || member.memberDate).slice(0,10) : "";
+      if (!date) return false;
+      const exp = new Date(date + "T23:59:59");
+      return !isNaN(exp.getTime()) && exp.getTime() < Date.now();
+    }
+
     async function handleLogin() {
       if (state.authLock) return;
       if (!validateLogin()) return;
@@ -2042,16 +2032,12 @@
           password: normalizeText(loginPasswordInput.value)
         };
 
-        const data = await postJson(payload);
+        let data = await postJson(payload);
+        data = parseResponseLoose(data);
 
         if (data.closed) {
           setWebClosedState(true, data.message || claimConfig.webClosedMessage);
           showAlert(topAlert, data.message || "ระบบเว็บปิดชั่วคราว", "warning", 6000);
-          return;
-        }
-
-        if (isExpiredResponse(data)) {
-          await handleExpiredResponse(data.message);
           return;
         }
 
@@ -2070,9 +2056,26 @@
 
         state.token = String(data.token || "").trim();
         localStorage.setItem(TOKEN_KEY, state.token);
-        state.member = data.member || buildLocalMemberFallback(payload.email, "", "", "");
 
-        await fetchMemberMe(true);
+        if (data.member) {
+          state.member = data.member;
+        } else {
+          state.member = buildLocalMemberFallback(payload.email, "", "", "");
+        }
+
+        const verified = await fetchMemberMe(true);
+        if (!verified && !state.member) {
+          await handleUnauthorizedResponse("เข้าสู่ระบบไม่สำเร็จ กรุณาเข้าสู่ระบบใหม่อีกครั้ง");
+          return;
+        }
+
+        if (isMemberExpired(state.member)) {
+          clearLocalSession(true);
+          showAuthStatus("บัญชีหมดอายุแล้ว กรุณาต่ออายุก่อนเข้าสู่ระบบ", "error");
+          showAlert(topAlert, "บัญชีหมดอายุแล้ว กรุณาต่ออายุก่อนเข้าสู่ระบบ", "warning", 6500);
+          return;
+        }
+
         saveRememberedLogin();
         updateMemberProfileUI();
         setActiveView("claimView");
@@ -2108,7 +2111,8 @@
           memberDate
         };
 
-        const data = await postJson(payload);
+        let data = await postJson(payload);
+        data = parseResponseLoose(data);
 
         if (data.closed) {
           setWebClosedState(true, data.message || claimConfig.webClosedMessage);
@@ -2185,7 +2189,7 @@
           return;
         }
 
-        showAlert(topAlert, data.message || "ระบบส่งรหัสผ่านชั่วคราวไปยังอีเมลของคุณแล้ว", "success", 6000);
+        showAlert(topAlert, data.message || "ระบบส่งรหัสหรือคำแนะนำรีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว", "success", 6000);
         showToast("ส่งรหัสทางอีเมลแล้ว");
       } catch (err) {
         showAlert(topAlert, "เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้งค่ะ", "error");
@@ -2194,35 +2198,44 @@
       }
     }
 
-    async function fetchMemberMe(silent = false) {
-      if (!state.token) return false;
+    async function checkExpiryInline() {
+      if (!state.token) {
+        showAlert(topAlert, "กรุณาเข้าสู่ระบบก่อน", "warning");
+        return;
+      }
+
+      showLoadingOverlay();
       try {
         const data = await fetchJsonWithRetry(
-          SCRIPT_URL + "?action=me&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now(),
+          SCRIPT_URL + "?action=checkExpiry&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now(),
           {},
           1
         );
 
-        if (isExpiredResponse(data)) {
-          if (!silent) await handleExpiredResponse(data.message);
-          return false;
+        if (isUnauthorizedMessage(data && data.message)) {
+          await handleUnauthorizedResponse(data.message);
+          return;
         }
 
-        if ((data && data.ok === false) || String(data && data.message || "").toLowerCase().includes("unauthorized")) {
-          if (!silent) {
-            await handleUnauthorizedResponse((data && data.message) || "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่อีกครั้ง");
+        if (!data || data.ok === false) {
+          showAlert(claimAlert, (data && data.message) || "ไม่สามารถเช็ควันหมดอายุได้", "warning", 5000);
+          return;
+        }
+
+        if (data.expiry) {
+          expiryInput.value = String(data.expiry).slice(0,10);
+          if (state.member) {
+            state.member.lastKnownExpiry = String(data.expiry).slice(0,10);
+            updateMemberProfileUI();
           }
-          return false;
         }
 
-        if (data && data.member) {
-          state.member = data.member;
-          updateMemberProfileUI();
-          return true;
-        }
-        return !!state.member;
+        showAlert(claimAlert, data.message || "เช็ควันหมดอายุเรียบร้อยแล้ว", "info", 6500);
+        showToast("เช็ควันหมดอายุแล้ว");
       } catch (err) {
-        return !!state.member;
+        showAlert(claimAlert, "เกิดข้อผิดพลาดในการเชื่อมต่อ", "error", 5000);
+      } finally {
+        hideLoadingOverlay();
       }
     }
 
@@ -2284,6 +2297,11 @@
     }
 
     async function doSubmitClaim() {
+      if (state.webClosed) {
+        showStatusError(claimConfig.webClosedMessage || "ระบบเว็บปิดชั่วคราว");
+        return;
+      }
+
       const expiry = normalizeText(expiryInput.value);
       const year = normalizeText(signupYearInput.value);
       const note = normalizeText(noteInput.value);
@@ -2328,12 +2346,7 @@
           return;
         }
 
-        if (isExpiredResponse(data)) {
-          await handleExpiredResponse(data.message);
-          return;
-        }
-
-        if (String(data && data.message || "").toLowerCase().includes("unauthorized")) {
+        if (isUnauthorizedMessage(data && data.message)) {
           await handleUnauthorizedResponse(data.message);
           return;
         }
@@ -2371,8 +2384,6 @@
           fetchTodayStatus();
         }
 
-        await initClaimWindowConfig();
-
         noteInput.value = "";
         updateNoteCounter();
         if (claimType !== "paid") resetSlipPreview();
@@ -2383,7 +2394,7 @@
 
         setTimeout(function() {
           safeSetMemberView("statusView");
-        }, 500);
+        }, 400);
       } catch (err) {
         showStatusError("เกิดข้อผิดพลาดในการเชื่อมต่อ กรุณาลองใหม่อีกครั้งค่ะ");
         state.submitLock = false;
@@ -2414,49 +2425,6 @@
         showToast("รีเฟรชสถานะแล้ว");
       } catch (err) {
         statusPageText.innerHTML = "<span class='status-error'>รีเฟรชสถานะไม่สำเร็จ</span>";
-      } finally {
-        hideLoadingOverlay();
-      }
-    }
-
-    async function checkExpiryForMember() {
-      if (!state.token || !state.member) {
-        showAlert(topAlert, "กรุณาเข้าสู่ระบบก่อนใช้งาน", "warning");
-        return;
-      }
-
-      showLoadingOverlay();
-      try {
-        const data = await fetchJsonWithRetry(
-          SCRIPT_URL + "?action=checkExpiry&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now(),
-          {},
-          1
-        );
-
-        if (isExpiredResponse(data)) {
-          await handleExpiredResponse(data.message);
-          return;
-        }
-
-        if ((data && data.ok === false) && String(data.message || "").toLowerCase().includes("unauthorized")) {
-          await handleUnauthorizedResponse(data.message);
-          return;
-        }
-
-        if (!data || data.ok === false) {
-          expiryCheckResult.textContent = data.message || "เช็ควันหมดอายุไม่สำเร็จ";
-          return;
-        }
-
-        expiryCheckResult.textContent = data.message || "เช็ควันหมดอายุเรียบร้อยแล้ว";
-
-        if (data.expiry && !expiryInput.value) {
-          expiryInput.value = data.expiry;
-        }
-
-        showToast("เช็ควันหมดอายุแล้ว");
-      } catch (err) {
-        expiryCheckResult.textContent = "เช็ควันหมดอายุไม่สำเร็จ กรุณาลองใหม่";
       } finally {
         hideLoadingOverlay();
       }
@@ -2500,7 +2468,7 @@
     btnForgotPassword.addEventListener("click", handleForgotPassword);
     btnLogout.addEventListener("click", handleLogout);
     btnRefreshStatus.addEventListener("click", refreshStatusPage);
-    btnCheckExpiry.addEventListener("click", checkExpiryForMember);
+    btnCheckExpiryInline.addEventListener("click", checkExpiryInline);
     floatAdminBtn.addEventListener("click", goSupport);
 
     btnPickSlip.addEventListener("click", function() { slipInput.click(); });
@@ -2578,43 +2546,38 @@
       updateNoteCounter();
       updatePasswordStrengthUI();
       loadRememberedLogin();
+      updateHeroVisibility();
       renderEmptyStatusPage();
 
-      try {
-        requireScriptUrl();
-      } catch (err) {
-        showAlert(topAlert, err.message, "warning", 0);
+      if (!SCRIPT_URL) {
+        showAlert(topAlert, "กรุณาใส่ SCRIPT_URL ของ Web App ก่อนใช้งาน", "warning", 0);
         return;
       }
 
-      try {
-        await initClaimWindowConfig();
-      } catch (err) {
-        showAlert(topAlert, "โหลดค่าระบบไม่สำเร็จ แต่ยังใช้งานต่อได้", "warning", 5000);
-      }
-
-      updateClaimWindowState();
-      await fetchTodayStatus(true);
+      await fetchBootstrap();
 
       if (state.token) {
         const ok = await fetchMemberMe(true);
         if (ok) {
-          await fetchClaimHistory();
-          setActiveView("claimView");
+          if (isMemberExpired(state.member)) {
+            clearLocalSession(true);
+            showAlert(topAlert, "บัญชีหมดอายุแล้ว กรุณาต่ออายุก่อนเข้าสู่ระบบ", "warning", 6500);
+            setActiveView("loginView");
+          } else {
+            setActiveView("claimView");
+          }
         } else {
           clearLocalSession(true);
         }
       }
 
-      setInterval(async function() {
-        try {
-          await initClaimWindowConfig();
-        } catch (err) {}
-      }, CONFIG_POLL_INTERVAL);
-
-      if (STATUS_POLL_INTERVAL > 0) {
-        setInterval(fetchTodayStatus, STATUS_POLL_INTERVAL);
+      if (!userSelectedView && !state.token) {
+        setActiveView("loginView");
       }
+
+      setInterval(async function() {
+        await fetchBootstrap();
+      }, CONFIG_POLL_INTERVAL);
     });
   </script>
 </body>
