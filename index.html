@@ -343,7 +343,7 @@
     .loading-sub{margin-top:8px;font-size:.87rem;color:var(--sub);line-height:1.65;text-align:center}
 
     .footer{margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--sub);font-size:.74rem;text-align:center}
-    .support-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid #eadfd5}
+    .support-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.9);border:1px solid #eadfd5;cursor:pointer}
     .copyright{letter-spacing:.16em;text-transform:uppercase;text-align:center}
     .shake{animation:shake .4s;border-color:var(--danger)!important}
     @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
@@ -669,7 +669,7 @@
     </main>
 
     <footer class="footer">
-      <div class="support-pill">
+      <div class="support-pill" id="supportPill" role="button" tabindex="0">
         <span>Support</span>
         <span id="supportLine">@467dlpti</span>
       </div>
@@ -703,7 +703,7 @@
   </div>
 
   <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxZkVSIfP1zn-CRU-7yN3Mort8BS1F4WkU9jILNM-0fo7Ud_l2i-TdAkAFVpUJo1aT5/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpK4GBuGOjx65ktKah_7WvBc8mMRz2P_OT6BKJTLqNjI-m8CdQi33ApLgybz3TBuB-ZA/exec";
     const STATUS_POLL_INTERVAL = 30000;
     const CONFIG_POLL_INTERVAL = 30000;
     const MAX_NOTE_LENGTH = 500;
@@ -735,7 +735,11 @@
       lineClaimEnabled: true,
       webClosedMessage: "ระบบเว็บปิดชั่วคราว",
       lineClaimClosedMessage: "",
-      webClaimLink: ""
+      webClaimLink: "",
+      routeMessage: "",
+      customerNotice: "",
+      bothClosedMessage: "",
+      lineEnabled: true
     };
 
     const state = {
@@ -745,7 +749,8 @@
       authLock: false,
       webClosed: false,
       isClaimOpen: true,
-      isLoading: false
+      isLoading: false,
+      lastBootstrap: null
     };
 
     let activeSlipFile = null;
@@ -784,6 +789,8 @@
     const bankAccountNoEl = document.getElementById("bankAccountNo");
     const bankAccountNameEl = document.getElementById("bankAccountName");
     const supportLineEl = document.getElementById("supportLine");
+    const supportPill = document.getElementById("supportPill");
+    const paymentQr = document.getElementById("paymentQr");
 
     const profileBox = document.getElementById("memberProfileBox");
     const profileEmail = document.getElementById("profileEmail");
@@ -864,13 +871,23 @@
         .replace(/'/g, "&#39;");
     }
 
-    function showLoading(){ loadingOverlay.classList.add("show"); document.body.style.overflow = "hidden"; }
-    function hideLoading(){ loadingOverlay.classList.remove("show"); document.body.style.overflow = ""; }
+    function showLoading(){
+      state.isLoading = true;
+      loadingOverlay.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function hideLoading(){
+      state.isLoading = false;
+      loadingOverlay.classList.remove("show");
+      document.body.style.overflow = "";
+    }
 
     function showToast(message){
       toast.textContent = message || "เรียบร้อยแล้ว";
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 1800);
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
     function showAlert(el, message, type = "info", timeout = 4000){
@@ -886,6 +903,13 @@
       }
     }
 
+    function clearAlert(el){
+      if (!el) return;
+      clearTimeout(el._timer);
+      el.className = "alert-box";
+      el.textContent = "";
+    }
+
     function showGlobalBanner(message, isError = false){
       globalBanner.className = "global-banner shell-card show" + (isError ? " error" : "");
       globalBanner.textContent = message || "";
@@ -894,6 +918,12 @@
     function hideGlobalBanner(){
       globalBanner.className = "global-banner shell-card";
       globalBanner.textContent = "";
+    }
+
+    function setStatusText(el, message, cls = ""){
+      if (!el) return;
+      el.className = cls || "";
+      el.textContent = message || "";
     }
 
     function setActiveView(viewId, byUser = false){
@@ -909,15 +939,13 @@
 
     function formatThaiDate(value){
       if (!value) return "-";
-      const d = new Date(value);
-      if (isNaN(d.getTime())){
-        if (/^\d{4}-\d{2}-\d{2}$/.test(value)){
-          const [y,m,day] = value.split("-").map(Number);
-          const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-          return `${day} ${months[m-1]} ${y+543}`;
-        }
-        return value;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))){
+        const [y,m,d] = String(value).split("-").map(Number);
+        const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
+        return `${d} ${months[m - 1]} ${y + 543}`;
       }
+      const d = new Date(value);
+      if (isNaN(d.getTime())) return value;
       const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
       return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543}`;
     }
@@ -996,6 +1024,24 @@
       }catch(e){ return null; }
     }
 
+    function clearLocalSession(stay = false){
+      state.token = "";
+      state.member = null;
+      localStorage.removeItem(TOKEN_KEY);
+      updateMemberProfileUI();
+      renderEmptyStatusPage();
+      clearForm();
+      setStatusText(authStatus, "");
+      if (!stay) setActiveView("loginView");
+    }
+
+    function getSupportUrl(lineId){
+      const id = String(lineId || "").trim();
+      if (!id) return "";
+      if (/^https?:\/\//i.test(id)) return id;
+      return SUPPORT_LINK_BASE + encodeURIComponent(id);
+    }
+
     function setWebClosedState(flag, message){
       state.webClosed = !!flag;
       const controls = [
@@ -1015,8 +1061,21 @@
       bankAccountNoEl.textContent = claimConfig.bankAccountNo || "";
       bankAccountNameEl.textContent = claimConfig.bankAccountName || "";
       supportLineEl.textContent = claimConfig.supportLine || "@467dlpti";
+
+      if (claimConfig.paymentQrUrl){
+        paymentQr.src = claimConfig.paymentQrUrl;
+      }
+
       updateClaimWindowState();
-      setWebClosedState(!claimConfig.webEnabled, claimConfig.webClosedMessage);
+
+      if (!claimConfig.webEnabled){
+        setWebClosedState(true, claimConfig.webClosedMessage || "ระบบเว็บปิดชั่วคราว");
+      } else {
+        setWebClosedState(false);
+        if (!state.token && claimConfig.routeMessage && !claimConfig.isOpenNow){
+          showGlobalBanner(claimConfig.routeMessage, false);
+        }
+      }
     }
 
     function updateClaimWindowState(){
@@ -1026,13 +1085,13 @@
         onlineDot.classList.remove("offline");
         onlineText.textContent = "สถานะ: เปิดรับเคลม";
         claimTimeNote.classList.remove("closed");
-        claimTimeNote.textContent = claimConfig.claimOpenText;
+        claimTimeNote.textContent = claimConfig.claimOpenText || "เปิดรับเคลม";
       } else {
         onlineStatus.classList.add("closed");
         onlineDot.classList.add("offline");
         onlineText.textContent = "สถานะ: ปิดรับเคลม";
         claimTimeNote.classList.add("closed");
-        claimTimeNote.textContent = claimConfig.claimOpenText;
+        claimTimeNote.textContent = claimConfig.claimOpenText || claimConfig.outOfTimeErrorText || "ขณะนี้ปิดรับเคลม";
       }
     }
 
@@ -1062,8 +1121,8 @@
       profileSignupYear.textContent = state.member.signupYearThai || "-";
       signupYearInput.value = state.member.signupYearThai || "";
       signupYearDisplay.value = state.member.signupYearThai || "";
-      expiryCheckResult.textContent = state.member.lastKnownExpiry
-        ? "วันหมดอายุล่าสุดที่ระบบจำได้: " + state.member.lastKnownExpiry
+      expiryCheckResult.innerHTML = state.member.lastKnownExpiry
+        ? ("วันหมดอายุล่าสุดที่ระบบจำได้: " + escapeHtml(state.member.lastKnownExpiry))
         : "";
       syncPaymentSection();
     }
@@ -1121,6 +1180,9 @@
     }
 
     function updateNoteCounter(){
+      if (noteInput.value.length > MAX_NOTE_LENGTH){
+        noteInput.value = noteInput.value.slice(0, MAX_NOTE_LENGTH);
+      }
       noteCounter.textContent = `${noteInput.value.length} / ${MAX_NOTE_LENGTH}`;
     }
 
@@ -1158,6 +1220,28 @@
       const data = await fetchJson(SCRIPT_URL + "?action=config&_t=" + Date.now());
       claimConfig = { ...claimConfig, ...data };
       renderConfigToUI();
+      return claimConfig;
+    }
+
+    async function bootstrapApp(){
+      const url = SCRIPT_URL + "?action=bootstrap" + (state.token ? "&token=" + encodeURIComponent(state.token) : "") + "&_t=" + Date.now();
+      const data = await fetchJson(url);
+      if (!data || !data.ok) return null;
+
+      state.lastBootstrap = data;
+      claimConfig = { ...claimConfig, ...(data.config || {}) };
+      renderConfigToUI();
+
+      if (data.member){
+        state.member = data.member;
+        updateMemberProfileUI();
+      }
+
+      if (Array.isArray(data.history)){
+        renderHistory(data.history);
+      }
+
+      return data;
     }
 
     async function fetchMemberMe(silent = false){
@@ -1182,16 +1266,6 @@
       return true;
     }
 
-    function clearLocalSession(stay = false){
-      state.token = "";
-      state.member = null;
-      localStorage.removeItem(TOKEN_KEY);
-      updateMemberProfileUI();
-      renderEmptyStatusPage();
-      clearForm();
-      if (!stay) setActiveView("loginView");
-    }
-
     async function handleLogin(){
       if (state.authLock) return;
       const email = normalizeEmail(loginEmailInput.value);
@@ -1199,6 +1273,7 @@
 
       loginEmailField.classList.remove("shake");
       loginPasswordField.classList.remove("shake");
+      clearAlert(topAlert);
 
       if (!email || !loginEmailInput.checkValidity()){
         loginEmailField.classList.add("shake");
@@ -1223,6 +1298,7 @@
             setWebClosedState(true, data.message || claimConfig.webClosedMessage);
           }
           showAlert(topAlert, data.message || "เข้าสู่ระบบไม่สำเร็จ", data.expired ? "warning" : "error", 5000);
+          setStatusText(authStatus, data.message || "", data.expired ? "status-error" : "");
           return;
         }
 
@@ -1231,11 +1307,13 @@
         state.member = data.member || null;
         updateMemberProfileUI();
         saveRememberedLogin();
+        setStatusText(authStatus, "เข้าสู่ระบบสำเร็จ", "status-ok");
         setActiveView("claimView");
         showToast("เข้าสู่ระบบสำเร็จ");
         await loadStatusPage();
       }catch(err){
         showAlert(topAlert, "เกิดข้อผิดพลาดในการเชื่อมต่อ", "error");
+        setStatusText(authStatus, "เชื่อมต่อเซิร์ฟเวอร์ไม่สำเร็จ", "status-error");
       }finally{
         hideLoading();
         btnLogin.disabled = false;
@@ -1255,6 +1333,7 @@
       registerPasswordField.classList.remove("shake");
       registerConfirmPasswordField.classList.remove("shake");
       registerMemberDateField.classList.remove("shake");
+      clearAlert(registerAlert);
 
       if (!email || !registerEmail.checkValidity()){
         registerEmailField.classList.add("shake");
@@ -1337,7 +1416,7 @@
       try{
         const data = await fetchJson(SCRIPT_URL + "?action=checkExpiry&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now());
         if (!data.ok){
-          expiryCheckResult.textContent = data.message || "เช็ควันหมดอายุไม่สำเร็จ";
+          expiryCheckResult.innerHTML = escapeHtml(data.message || "เช็ควันหมดอายุไม่สำเร็จ").replace(/\n/g, "<br>");
           return;
         }
         expiryCheckResult.innerHTML = escapeHtml(data.message || "").replace(/\n/g, "<br>");
@@ -1374,6 +1453,7 @@
 
       expiryField.classList.remove("shake");
       noteField.classList.remove("shake");
+      clearAlert(claimAlert);
 
       if (!state.token || !state.member){
         setActiveView("loginView");
@@ -1383,8 +1463,13 @@
 
       if (state.submitLock) return false;
 
+      if (state.webClosed){
+        showAlert(claimAlert, claimConfig.webClosedMessage || "ระบบเว็บปิดชั่วคราว", "warning");
+        return false;
+      }
+
       if (!state.isClaimOpen){
-        showAlert(claimAlert, claimConfig.outOfTimeErrorText, "warning");
+        showAlert(claimAlert, claimConfig.outOfTimeErrorText || "วันนี้ปิดรับแล้ว", "warning");
         return false;
       }
 
@@ -1460,9 +1545,13 @@
             showAlert(topAlert, data.message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อน", "warning", 5000);
             return;
           }
+          if (data.closed){
+            setWebClosedState(true, data.message || claimConfig.webClosedMessage);
+          }
           showAlert(claimAlert, data.message || "ส่งคำขอไม่สำเร็จ", "error", 5000);
-          if (data.inStoreGroup){
-            status.innerHTML = escapeHtml(data.message).replace(/\n/g, "<br>");
+          if (data.inStoreGroup || data.message){
+            status.className = "status-info";
+            status.innerHTML = escapeHtml(data.message || "").replace(/\n/g, "<br>");
           }
           return;
         }
@@ -1522,7 +1611,11 @@
     }
 
     async function loadStatusPage(){
-      if (!state.token) return;
+      if (!state.token) {
+        renderEmptyStatusPage();
+        return;
+      }
+
       const data = await fetchJson(SCRIPT_URL + "?action=history&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now());
       if (!data.ok){
         if (data.expired){
@@ -1581,6 +1674,40 @@
       updateNoteCounter();
     }
 
+    function applyLastSlipPreviewIfAny(){
+      const last = loadLastSlip();
+      if (!last || !last.dataUrl) return;
+      slipPreview.src = last.dataUrl;
+      slipPreviewWrap.style.display = "flex";
+      fileName.textContent = last.name || "slip";
+    }
+
+    function bindSupportAction(){
+      const url = getSupportUrl(claimConfig.supportLine);
+      if (!url) return;
+      supportPill.onclick = () => window.open(url, "_blank");
+      supportPill.onkeypress = (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          window.open(url, "_blank");
+        }
+      };
+    }
+
+    function attachKeyboardSubmit(){
+      loginPasswordInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleLogin();
+      });
+      registerConfirmPassword.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleRegister();
+      });
+      noteInput.addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+          if (validateClaimForm()) openConfirmModal();
+        }
+      });
+    }
+
     document.querySelectorAll(".toggle-pass").forEach(btn => {
       btn.addEventListener("click", function(){
         const input = document.getElementById(btn.dataset.target);
@@ -1594,21 +1721,31 @@
     btnRegister.addEventListener("click", handleRegister);
     btnForgotPassword.addEventListener("click", handleForgotPassword);
     btnLogout.addEventListener("click", handleLogout);
+
     btnRefreshStatus.addEventListener("click", async () => {
       showLoading();
       try{
         await loadStatusPage();
         showToast("รีเฟรชสถานะแล้ว");
-      }finally{ hideLoading(); }
+      }finally{
+        hideLoading();
+      }
     });
 
     btnCheckExpiry.addEventListener("click", handleCheckExpiry);
-    btnClear.addEventListener("click", () => { clearForm(); showToast("ล้างฟอร์มแล้ว"); });
+
+    btnClear.addEventListener("click", () => {
+      clearForm();
+      showToast("ล้างฟอร์มแล้ว");
+    });
+
     btnCopyAccount.addEventListener("click", async () => {
       try{
         await navigator.clipboard.writeText(claimConfig.bankAccountNo || "");
         showToast("คัดลอกเลขบัญชีแล้ว");
-      }catch(e){}
+      }catch(e){
+        showToast("คัดลอกไม่สำเร็จ");
+      }
     });
 
     btnPickSlip.addEventListener("click", () => slipInput.click());
@@ -1618,6 +1755,7 @@
       const file = slipInput.files && slipInput.files[0] ? slipInput.files[0] : null;
       setSlipFile(file, slipInput);
     });
+
     slipInputCamera.addEventListener("change", () => {
       const file = slipInputCamera.files && slipInputCamera.files[0] ? slipInputCamera.files[0] : null;
       setSlipFile(file, slipInputCamera);
@@ -1646,6 +1784,7 @@
     });
 
     btnCancelConfirm.addEventListener("click", closeConfirmModal);
+
     btnConfirmSubmit.addEventListener("click", async () => {
       closeConfirmModal();
       await doSubmitClaim();
@@ -1657,35 +1796,57 @@
 
     showRegisterBtn.addEventListener("click", () => setActiveView("registerView", true));
     backToLoginBtn.addEventListener("click", () => setActiveView("loginView", true));
+
     goClaimViewBtn.addEventListener("click", () => setActiveView("claimView", true));
-    goStatusViewBtn.addEventListener("click", async () => { setActiveView("statusView", true); showLoading(); try{ await loadStatusPage(); } finally{ hideLoading(); } });
+    goStatusViewBtn.addEventListener("click", async () => {
+      setActiveView("statusView", true);
+      showLoading();
+      try { await loadStatusPage(); } finally { hideLoading(); }
+    });
+
     goClaimViewBtn2.addEventListener("click", () => setActiveView("claimView", true));
-    goStatusViewBtn2.addEventListener("click", async () => { setActiveView("statusView", true); showLoading(); try{ await loadStatusPage(); } finally{ hideLoading(); } });
+    goStatusViewBtn2.addEventListener("click", async () => {
+      setActiveView("statusView", true);
+      showLoading();
+      try { await loadStatusPage(); } finally { hideLoading(); }
+    });
 
     registerPassword.addEventListener("input", updatePasswordStrengthUI);
     noteInput.addEventListener("input", updateNoteCounter);
     rememberPassword.addEventListener("change", saveRememberedLogin);
     loginEmailInput.addEventListener("input", () => { if (rememberPassword.checked) saveRememberedLogin(); });
     loginPasswordInput.addEventListener("input", () => { if (rememberPassword.checked) saveRememberedLogin(); });
+    expiryInput.addEventListener("change", () => clearAlert(claimAlert));
 
     window.addEventListener("load", async function(){
       setActiveView("loginView");
       updateNoteCounter();
       updatePasswordStrengthUI();
       loadRememberedLogin();
+      attachKeyboardSubmit();
+      applyLastSlipPreviewIfAny();
 
       try{
         await initConfig();
+        bindSupportAction();
       }catch(err){
         showAlert(topAlert, "โหลดค่าตั้งต้นไม่สำเร็จ", "warning", 4000);
       }
+
+      try{
+        const boot = await bootstrapApp();
+        if (boot && Array.isArray(boot.history) && boot.history.length) {
+          renderHistory(boot.history);
+        }
+        bindSupportAction();
+      }catch(e){}
 
       if (state.token){
         showLoading();
         try{
           const ok = await fetchMemberMe(true);
           if (ok){
-            setActiveView("claimView");
+            if (!userSelectedView) setActiveView("claimView");
             await loadStatusPage();
           } else {
             clearLocalSession(true);
@@ -1697,11 +1858,14 @@
       }
 
       setInterval(async () => {
-        try { await initConfig(); } catch(e){}
+        try {
+          await initConfig();
+          bindSupportAction();
+        } catch(e){}
       }, CONFIG_POLL_INTERVAL);
 
       setInterval(async () => {
-        if (statusView.classList.contains("active") && state.token){
+        if (statusView.classList.contains("active") && state.token && !state.isLoading){
           try { await loadStatusPage(); } catch(e){}
         }
       }, STATUS_POLL_INTERVAL);
