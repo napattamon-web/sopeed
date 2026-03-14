@@ -726,6 +726,7 @@
       bankName: "ธ.กสิกร (KBank)",
       bankAccountNo: "0628794251",
       bankAccountName: "นภัทรธมณฑ์ ฤทธิ์ชัยศักดิ์",
+      paymentQrUrl: "",
       paymentTitle: "ชำระค่าดูแล 19 บาท",
       paymentNote: "สำหรับปีสมัครที่กำหนด ระบบจะให้ชำระ 19 บาท และแนบหลักฐานเพื่อเข้าคิวเคลม",
       paymentRequireSlip: "หากไม่แนบสลิป ระบบจะยังไม่รับเข้าระบบเคลม",
@@ -935,19 +936,6 @@
       goStatusViewBtn.classList.toggle("active", viewId === "statusView");
       goClaimViewBtn2.classList.toggle("active", viewId === "claimView");
       goStatusViewBtn2.classList.toggle("active", viewId === "statusView");
-    }
-
-    function formatThaiDate(value){
-      if (!value) return "-";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(String(value))){
-        const [y,m,d] = String(value).split("-").map(Number);
-        const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-        return `${d} ${months[m - 1]} ${y + 543}`;
-      }
-      const d = new Date(value);
-      if (isNaN(d.getTime())) return value;
-      const months = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-      return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()+543}`;
     }
 
     function formatThaiDateTime(value){
@@ -1248,12 +1236,6 @@
       if (!state.token) return false;
       const data = await fetchJson(SCRIPT_URL + "?action=me&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now());
       if (!data.ok){
-        if (data.expired){
-          clearLocalSession(true);
-          setActiveView("loginView");
-          showAlert(topAlert, data.message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อน", "warning", 5000);
-          return false;
-        }
         if (!silent){
           clearLocalSession(true);
           setActiveView("loginView");
@@ -1297,8 +1279,8 @@
           if (data.closed){
             setWebClosedState(true, data.message || claimConfig.webClosedMessage);
           }
-          showAlert(topAlert, data.message || "เข้าสู่ระบบไม่สำเร็จ", data.expired ? "warning" : "error", 5000);
-          setStatusText(authStatus, data.message || "", data.expired ? "status-error" : "");
+          showAlert(topAlert, data.message || "เข้าสู่ระบบไม่สำเร็จ", "error", 5000);
+          setStatusText(authStatus, data.message || "", "status-error");
           return;
         }
 
@@ -1416,6 +1398,12 @@
       try{
         const data = await fetchJson(SCRIPT_URL + "?action=checkExpiry&token=" + encodeURIComponent(state.token) + "&_t=" + Date.now());
         if (!data.ok){
+          if (data.expired){
+            clearLocalSession(true);
+            setActiveView("loginView");
+            showAlert(topAlert, "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่", "warning", 5000);
+            return;
+          }
           expiryCheckResult.innerHTML = escapeHtml(data.message || "เช็ควันหมดอายุไม่สำเร็จ").replace(/\n/g, "<br>");
           return;
         }
@@ -1542,7 +1530,7 @@
           if (data.expired){
             clearLocalSession(true);
             setActiveView("loginView");
-            showAlert(topAlert, data.message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อน", "warning", 5000);
+            showAlert(topAlert, "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่", "warning", 5000);
             return;
           }
           if (data.closed){
@@ -1621,7 +1609,7 @@
         if (data.expired){
           clearLocalSession(true);
           setActiveView("loginView");
-          showAlert(topAlert, data.message || "เว็บหมดอายุแล้ว กรุณาต่ออายุก่อน", "warning", 5000);
+          showAlert(topAlert, "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่", "warning", 5000);
           return;
         }
         renderEmptyStatusPage();
