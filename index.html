@@ -3,216 +3,522 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ตารางภารกิจผู้บังคับบัญชา บก.อก.ฝ.</title>
+  <title>ภารกิจผู้บังคับบัญชา</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    /* เรียกใช้ฟอนต์ TH Sarabun IT9 */
     @font-face {
       font-family: "THSarabunIT9";
-      src: local("TH Sarabun IT9"), local("TH Sarabun New"), local("Sarabun");
-      font-weight: normal; font-style: normal;
+      src: local("TH SarabunIT๙"), local("TH SarabunIT9"), local("TH Sarabun New");
     }
 
     :root {
       --page-w: 1651px;
       --page-h: 991px;
-      --border-color: #000000;
-      --font-main: "THSarabunIT9", sans-serif;
+      --border: #111111;
+      --danger: #b40000;
+      --text: #111111;
+      --bg: #ffffff;
+      --body-bg: #f3f3f3;
+      --btn: #4b5563;
+      --ok: #0f5132;
     }
 
-    * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "THSarabunIT9", "TH SarabunIT๙", "TH Sarabun New", Tahoma, sans-serif;
+      overflow-x: hidden;
+    }
 
     body {
-      margin: 0; padding: 20px;
-      background: #333;
-      font-family: var(--font-main);
+      padding: 8px 0 20px;
     }
 
-    .controls { text-align: center; margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; }
-    
+    .toolbar,
+    .hint,
+    .status,
+    .loading {
+      width: min(100%, 1651px);
+      margin: 0 auto 10px;
+      padding: 0 8px;
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar h1 {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 700;
+    }
+
+    .toolbar .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
     button {
-      padding: 10px 25px; font-size: 20px; cursor: pointer;
-      border: none; border-radius: 5px; font-family: var(--font-main);
-      transition: 0.3s;
+      border: 0;
+      border-radius: 8px;
+      padding: 8px 14px;
+      color: #fff;
+      background: var(--btn);
+      font-size: 20px;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1;
     }
 
-    .btn-download { background: #28a745; color: white; }
-    .btn-refresh { background: #17a2b8; color: white; }
-    button:hover { opacity: 0.8; }
+    .hint {
+      font-size: 20px;
+      color: #444;
+    }
 
-    /* พื้นที่กระดาษ (HD) */
-    #capture-area {
+    .status {
+      font-size: 20px;
+      display: none;
+    }
+
+    .status.show {
+      display: block;
+    }
+
+    .status.ok {
+      color: var(--ok);
+    }
+
+    .status.error {
+      color: var(--danger);
+      font-weight: 700;
+    }
+
+    .loading {
+      text-align: center;
+      font-size: 28px;
+      padding: 48px 12px;
+    }
+
+    .page-wrap {
+      width: min(100%, 1651px);
+      margin: 0 auto 18px;
+      padding: 0 8px;
+    }
+
+    .page-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 6px;
+    }
+
+    .stage {
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .page-scale-box {
+      width: var(--page-w);
+      height: var(--page-h);
+      transform-origin: top left;
+      position: relative;
+      background: #fff;
+    }
+
+    .sheet-page {
       width: var(--page-w);
       height: var(--page-h);
       background: #fff;
-      margin: 0 auto;
+      overflow: hidden;
       position: relative;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #000;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
 
-    /* ส่วนหัว - สีชมพู */
-    .header-banner {
-      width: 100%; text-align: center; padding: 20px 0;
-      background-color: #ebadd6; 
-      border-bottom: 2px solid var(--border-color);
-    }
-    .header-banner h2 { margin: 0; font-size: 44px; font-weight: bold; line-height: 1; }
-    .header-banner p { margin: 8px 0 0; font-size: 36px; font-weight: bold; line-height: 1; }
-
-    /* ตาราง */
-    .content-area { flex-grow: 1; overflow: hidden; }
-    table.mission-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-    
-    table.mission-table th, 
-    table.mission-table td {
-      border: 1.5px solid var(--border-color);
-      padding: 10px 15px; font-size: 30px; line-height: 1.0;
-      vertical-align: top; word-wrap: break-word; color: #000;
+    .title-box {
+      text-align: center;
+      font-weight: 700;
+      font-size: 34px;
+      line-height: 1.12;
+      white-space: pre-line;
+      padding: 10px 10px 8px;
+      border: 1px solid var(--border);
+      border-bottom: 0;
     }
 
-    /* หัวตาราง - สีฟ้า */
-    table.mission-table th {
-      background-color: #a6caf0;
-      font-weight: bold; text-align: center;
-      height: 65px; vertical-align: middle;
+    .title-box .sub {
+      font-size: 31px;
+      line-height: 1.1;
+      font-weight: 700;
+      margin-top: 2px;
     }
 
-    .col-name { width: 23%; }
-    .col-time { width: 17%; text-align: center; }
-    .col-task { width: 40%; }
-    .col-place { width: 20%; }
-
-    .name-cell { font-weight: bold; }
-    .red-task { color: #d00000; font-weight: bold; }
-
-    /* ส่วนท้าย */
-    .footer-area {
-      position: absolute; bottom: 30px; width: 100%;
-      padding: 0 60px; display: flex;
-      justify-content: space-between; align-items: flex-end;
+    table.mission {
+      width: 100%;
+      border-collapse: collapse;
+      border-spacing: 0;
+      table-layout: fixed;
+      margin: 0;
     }
-    .signature-block { text-align: center; font-size: 30px; line-height: 1.2; }
-    .footer-note { color: #d00000; font-weight: bold; font-size: 28px; }
 
-    /* ปรับแต่งการแสดงผลบน Browser (Scaling) */
-    @media (max-width: 1700px) {
-      #capture-area { transform: scale(0.5); transform-origin: top center; margin-bottom: -500px; }
+    table.mission th,
+    table.mission td {
+      border: 1px solid var(--border);
+      text-align: center;
+      vertical-align: top;
+      padding: 8px 10px;
+      white-space: pre-line;
+      line-height: 1.12;
+      font-size: 34px;
+      font-weight: 400;
+      background: var(--body-bg);
+      background-image: none !important;
+      box-shadow: none !important;
+    }
+
+    table.mission th {
+      font-size: 33px;
+      font-weight: 700;
+      padding-top: 6px;
+      padding-bottom: 6px;
+      vertical-align: middle;
+      line-height: 1.05;
+    }
+
+    .name-cell {
+      font-weight: 700;
+      border-right: 1px solid var(--border) !important;
+    }
+
+    .red-text {
+      color: var(--danger);
+      font-weight: 700 !important;
+    }
+
+    .footer-note {
+      position: absolute;
+      right: 8px;
+      bottom: 8px;
+      text-align: right;
+      color: var(--danger);
+      font-size: 28px;
+      font-weight: 700;
+      background: #fff;
+      padding: 2px 4px;
+      border: 0 !important;
+    }
+
+    .signature {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 18px;
+      text-align: center;
+      white-space: pre-line;
+      font-size: 28px;
+      line-height: 1.15;
+      background: transparent;
+      border: 0 !important;
+      pointer-events: none;
+    }
+
+    .error-box {
+      width: min(100%, 1651px);
+      margin: 0 auto;
+      padding: 16px 8px;
+      color: var(--danger);
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    /* สัดส่วนคอลัมน์ */
+    .page-1 col.c1, .page-3 col.c1 { width: 19%; }
+    .page-1 col.c2, .page-3 col.c2 { width: 21%; }
+    .page-1 col.c3, .page-3 col.c3 { width: 42%; }
+    .page-1 col.c4, .page-3 col.c4 { width: 18%; }
+
+    .page-2 col.c1 { width: 16.8%; }
+    .page-2 col.c2 { width: 18.2%; }
+    .page-2 col.c3 { width: 35.8%; }
+    .page-2 col.c4 { width: 29.2%; }
+
+    .rows-area {
+      height: 878px;
+    }
+
+    /* ถ้า B/C/D ว่างทั้งหมด ให้ตัดเส้นด้านในเป็นช่องเดียว */
+    tr.single-merged td.inner-merge {
+      border-left: 0 !important;
+      border-right: 0 !important;
+    }
+
+    tr.single-merged td.inner-merge.first {
+      border-left: 1px solid var(--border) !important;
+    }
+
+    tr.single-merged td.inner-merge.last {
+      border-right: 1px solid var(--border) !important;
+    }
+
+    @media (max-width: 900px) {
+      .toolbar h1 {
+        font-size: 22px;
+      }
+
+      .hint,
+      .status {
+        font-size: 16px;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
     }
   </style>
 </head>
 <body>
-
-<div class="controls">
-  <button class="btn-refresh" onclick="fetchData()">🔄 อัปเดตข้อมูลจาก Sheet</button>
-  <button class="btn-download" onclick="downloadImage()">💾 บันทึกเป็นรูปภาพ (HD)</button>
-</div>
-
-<div id="capture-area">
-  <div class="header-banner">
-    <h2 id="dept-name">ตารางภารกิจผู้บังคับบัญชา กองบังคับการอารักขาและควบคุมฝูงชน</h2>
-    <p id="mission-date">ประจำวันที่ ... รอโหลดข้อมูล ...</p>
-  </div>
-
-  <div class="content-area">
-    <table class="mission-table">
-      <thead>
-        <tr>
-          <th class="col-name">ผู้บังคับบัญชา</th>
-          <th class="col-time">เวลา</th>
-          <th class="col-task">ภารกิจ</th>
-          <th class="col-place">สถานที่</th>
-        </tr>
-      </thead>
-      <tbody id="table-body">
-        </tbody>
-    </table>
-  </div>
-
-  <div class="footer-area">
-    <div class="signature-block">
-        (...................................................)<br>
-        ตำแหน่ง..........................................
+  <div class="toolbar">
+    <h1>ภารกิจผู้บังคับบัญชา</h1>
+    <div class="actions">
+      <button onclick="reloadData()">รีเฟรชข้อมูล</button>
     </div>
-    <div class="footer-note" id="footer-update">ข้อมูล ณ วันที่ ...</div>
   </div>
-</div>
 
-<script>
-  // คัดลอก URL จากการ Deployment ใน Google Apps Script มาวางที่นี่
-  const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbw74o7v2c41P16Et7MjZykAUGyqkA9JEe-JRVw7GYnH9xW6Cy3ot9T1mMou2HwBbpVvAQ/exec";
+  <div class="hint">
+    หน้าเว็บนี้ดึงข้อมูลจาก Google Apps Script และแชร์ภาพแต่ละหน้าในขนาด 1651x991 px
+  </div>
 
-  async function fetchData() {
-    const tbody = document.getElementById('table-body');
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding: 50px;">กำลังดึงข้อมูลจาก Google Sheets...</td></tr>';
+  <div id="statusBox" class="status"></div>
+  <div id="app">
+    <div class="loading">กำลังโหลดข้อมูล...</div>
+  </div>
 
-    try {
-      const response = await fetch(SHEET_API_URL);
-      const data = await response.json();
-      
-      tbody.innerHTML = ''; 
+  <script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwS2meFV5NjrZGUGr0vg8zNXALE4iB5rOQWxm-LuzPqBbJrQrYRXj-V7H7mqlt06zo2hw/exec";
+    let appData = null;
 
-      // วนลูปสร้างแถวข้อมูล
-      data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="name-cell">${item.name.replace(/\n/g, '<br>')}</td>
-          <td class="col-time">${item.time.replace(/\n/g, '<br>')}</td>
-          <td>${formatTask(item.task)}</td>
-          <td>${item.place.replace(/\n/g, '<br>')}</td>
-        `;
-        tbody.appendChild(row);
+    function showStatus(message, isError = false) {
+      const box = document.getElementById("statusBox");
+      box.textContent = message;
+      box.className = "status show " + (isError ? "error" : "ok");
+    }
+
+    function fetchPagesJSONP() {
+      return new Promise((resolve, reject) => {
+        const callbackName = "missionCallback_" + Date.now() + "_" + Math.floor(Math.random() * 100000);
+        const script = document.createElement("script");
+        const timeout = setTimeout(() => {
+          cleanup();
+          reject(new Error("โหลดข้อมูลหมดเวลา"));
+        }, 15000);
+
+        function cleanup() {
+          clearTimeout(timeout);
+          if (script.parentNode) script.parentNode.removeChild(script);
+          try {
+            delete window[callbackName];
+          } catch (e) {
+            window[callbackName] = undefined;
+          }
+        }
+
+        window[callbackName] = function (data) {
+          cleanup();
+          if (!data || !data.ok) {
+            reject(new Error((data && data.message) || "โหลดข้อมูลไม่สำเร็จ"));
+            return;
+          }
+          resolve(data.pages || []);
+        };
+
+        script.onerror = function () {
+          cleanup();
+          reject(new Error("เชื่อมต่อ GAS ไม่สำเร็จ หรือยังไม่ได้ deploy เวอร์ชันล่าสุด"));
+        };
+
+        script.src =
+          GAS_URL +
+          (GAS_URL.includes("?") ? "&" : "?") +
+          "action=pages" +
+          "&callback=" + encodeURIComponent(callbackName) +
+          "&_t=" + Date.now();
+
+        document.body.appendChild(script);
       });
+    }
 
-      // เติมแถวว่างด้านล่างเพื่อให้ดูเต็มแผ่น
-      const emptyRows = 5 - data.length;
-      if (emptyRows > 0) {
-        const spacer = document.createElement('tr');
-        spacer.style.height = (emptyRows * 100) + "px";
-        spacer.innerHTML = '<td></td><td></td><td></td><td></td>';
-        tbody.appendChild(spacer);
+    function fitAllPages() {
+      const boxes = document.querySelectorAll(".page-scale-box");
+      boxes.forEach(box => {
+        const parent = box.parentElement;
+        const availableWidth = parent.clientWidth;
+        const scale = Math.min(1, availableWidth / 1651);
+        box.style.transform = "scale(" + scale + ")";
+        parent.style.height = (991 * scale) + "px";
+      });
+    }
+
+    async function loadData() {
+      const pages = await fetchPagesJSONP();
+      appData = { pages };
+      renderPages(pages);
+      fitAllPages();
+      showStatus("โหลดข้อมูลจาก Google Sheet สำเร็จ");
+    }
+
+    function renderPages(pages) {
+      const app = document.getElementById("app");
+      app.innerHTML = "";
+
+      pages.forEach((page, idx) => {
+        const wrap = document.createElement("div");
+        wrap.className = "page-wrap";
+        const pageClass = "page-" + page.id;
+
+        wrap.innerHTML = `
+          <div class="page-actions">
+            <button onclick="sharePage(${idx})">แชร์หน้านี้</button>
+          </div>
+
+          <div class="stage">
+            <div class="page-scale-box">
+              <div class="sheet-page ${pageClass}" id="page-${idx}">
+                <div class="title-box" style="background:${page.titleColor}">
+                  <div>${escapeHtml(page.title)}</div>
+                  <div class="sub">${escapeHtml(page.subtitle || "")}</div>
+                </div>
+
+                <div class="rows-area">
+                  <table class="mission">
+                    <colgroup>
+                      <col class="c1">
+                      <col class="c2">
+                      <col class="c3">
+                      <col class="c4">
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th style="background:${page.headerColor}">ผู้บังคับบัญชา</th>
+                        <th style="background:${page.headerColor}">เวลา</th>
+                        <th style="background:${page.headerColor}">ภารกิจ</th>
+                        <th style="background:${page.headerColor}">สถานที่</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${page.rows.map(renderGroup).join("")}
+                    </tbody>
+                  </table>
+                </div>
+
+                ${page.signature ? `<div class="signature">${escapeHtml(page.signature)}</div>` : ""}
+                ${page.footerNote ? `<div class="footer-note">${escapeHtml(page.footerNote)}</div>` : ""}
+              </div>
+            </div>
+          </div>
+        `;
+
+        app.appendChild(wrap);
+      });
+    }
+
+    function renderGroup(group) {
+      const span = group.entries.length || 1;
+
+      return group.entries.map((entry, idx) => {
+        const time = (entry.time || "").trim();
+        const mission = (entry.mission || "").trim();
+        const location = (entry.location || "").trim();
+        const mergeRow = !time && !mission && !location;
+
+        return `
+          <tr class="${mergeRow ? "single-merged" : ""}">
+            ${idx === 0 ? `<td class="name-cell" rowspan="${span}">${escapeHtml(group.name)}</td>` : ""}
+            <td class="${mergeRow ? "inner-merge first" : ""}">${escapeHtml(time)}</td>
+            <td class="${entry.red ? "red-text" : ""} ${mergeRow ? "inner-merge" : ""}">${escapeHtml(mission)}</td>
+            <td class="${mergeRow ? "inner-merge last" : ""}">${escapeHtml(location)}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/\n/g, "<br>");
+    }
+
+    async function pageToBlob(pageEl) {
+      const canvas = await html2canvas(pageEl, {
+        scale: 1,
+        useCORS: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        imageTimeout: 0,
+        width: 1651,
+        height: 991,
+        windowWidth: 1651,
+        windowHeight: 991
+      });
+      return await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+    }
+
+    async function sharePage(index) {
+      try {
+        showStatus("กำลังเตรียมภาพ...");
+        const page = document.getElementById("page-" + index);
+        const blob = await pageToBlob(page);
+        const file = new File([blob], "mission-page-" + (index + 1) + ".png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            files: [file],
+            title: "ภารกิจหน้า " + (index + 1)
+          });
+          showStatus("แชร์ภาพสำเร็จ");
+        } else {
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = file.name;
+          a.click();
+          showStatus("อุปกรณ์นี้ไม่รองรับการแชร์ตรง ระบบดาวน์โหลดรูปให้แทน");
+        }
+      } catch (err) {
+        showStatus("แชร์ไม่สำเร็จ: " + (err.message || err), true);
       }
-
-      // อัปเดตวันที่ในหัวข้อและท้ายกระดาษ (อิงตามข้อมูลแถวแรก หรือ วันปัจจุบัน)
-      const now = new Date();
-      const thaiDate = now.toLocaleDateString('th-TH', { day: 'numeric', month: 'long', year: 'numeric' });
-      document.getElementById('footer-update').innerText = "ข้อมูล ณ วันที่ " + thaiDate;
-      // หมายเหตุ: วันที่ประจำภารกิจแนะนำให้แก้ใน HTML หรือดึงจาก Sheet คอลัมน์พิเศษ
-
-    } catch (error) {
-      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:red;">เกิดข้อผิดพลาด: ไม่สามารถเชื่อมต่อ API ได้</td></tr>';
-      console.error(error);
     }
-  }
 
-  function formatTask(task) {
-    // ถ้ามีคำว่า "เวร" ให้เป็นสีแดง
-    if (task.includes("เวร")) {
-      return `<span class="red-task">${task.replace(/\n/g, '<br>')}</span>`;
+    function reloadData() {
+      document.getElementById("app").innerHTML = '<div class="loading">กำลังโหลดข้อมูล...</div>';
+      showStatus("กำลังรีเฟรชข้อมูล...");
+      loadData().catch(err => {
+        document.getElementById("app").innerHTML =
+          '<div class="error-box">โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err) + "</div>";
+        showStatus("โหลดข้อมูลไม่สำเร็จ: " + (err.message || err), true);
+      });
     }
-    return task.replace(/\n/g, '<br>');
-  }
 
-  async function downloadImage() {
-    const element = document.getElementById('capture-area');
-    const canvas = await html2canvas(element, {
-      scale: 3, // ความชัดสูงสุด
-      useCORS: true,
-      width: 1651,
-      height: 991
+    window.addEventListener("resize", fitAllPages);
+
+    loadData().catch(err => {
+      document.getElementById("app").innerHTML =
+        '<div class="error-box">โหลดข้อมูลไม่สำเร็จ: ' + (err.message || err) + "</div>";
+      showStatus("โหลดข้อมูลไม่สำเร็จ: " + (err.message || err), true);
     });
-    
-    const link = document.createElement('a');
-    link.download = `ตารางภารกิจ_บก_อก_ฝ.png`;
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  }
-
-  // เรียกใช้ทันทีที่เปิดหน้า
-  window.onload = fetchData;
-</script>
-
+  </script>
 </body>
 </html>
